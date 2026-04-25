@@ -11,13 +11,11 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, Routes, Outlet } from 'react-router-dom';
 
-import Header from '@edx/frontend-component-header';
-import { FooterSlot } from '@edx/frontend-component-footer';
-
 import configureStore from './data/configureStore';
 import AccountSettingsPage, { NotFoundPage } from './account-settings';
 import IdVerificationPageSlot from './plugin-slots/IdVerificationPageSlot';
 import messages from './i18n';
+import { RobboFooter, RobboHeader } from './robbo-layout';
 
 import './index.scss';
 import Head from './head/Head';
@@ -30,12 +28,12 @@ subscribe(APP_READY, () => {
         <Head />
         <Routes>
           <Route element={(
-            <div className="d-flex flex-column" style={{ minHeight: '100vh' }}>
-              <Header />
+            <div className="robbo-layout-page">
+              <RobboHeader />
               <main className="flex-grow-1" id="main">
                 <Outlet />
               </main>
-              <FooterSlot />
+              <RobboFooter />
             </div>
         )}
           >
