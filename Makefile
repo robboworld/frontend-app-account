@@ -63,7 +63,11 @@ pull_translations:
                translations/frontend-component-header/src/i18n/messages:frontend-component-header \
                translations/frontend-app-account/src/i18n/messages:frontend-app-account
 
-	$(intl_imports) frontend-platform paragon frontend-component-header frontend-component-footer frontend-app-account
+	mkdir -p $(i18n)/messages/robbo-custom
+	cp $(i18n)/robbo-overrides/en.json $(i18n)/messages/robbo-custom/en.json
+	cp $(i18n)/robbo-overrides/ru.json $(i18n)/messages/robbo-custom/ru.json
+
+	$(intl_imports) frontend-platform paragon frontend-component-header frontend-component-footer frontend-app-account robbo-custom
 
 # This target is used by Travis.
 validate-no-uncommitted-package-lock-changes:

@@ -329,14 +329,5 @@
   "notification.preference.title": "{ text, select, core {Activity notifications} newDiscussionPost {New discussion posts} newQuestionPost {New question posts} contentReported {Reported content} courseUpdates {Course updates} oraStaffNotifications {New ORA submission for staff grading} oraGradeAssigned {Essay assignment grade received} other {{text}} }",
   "notification.preference.type.label": "Тип",
   "notification.preference.web.label": "Интернет",
-  "notification.preferences.notifications.label": "Уведомления",
-  "robbo.header.mainNav.myCourses": "Мои курсы",
-  "robbo.header.mainNav.programs": "Программы",
-  "robbo.header.mainNav.courseCatalog": "Каталог курсов",
-  "robbo.header.mainNav.aria": "Основная навигация",
-  "robbo.header.user.toggleAria": "Меню параметров",
-  "robbo.header.user.menuDropdownAria": "Дополнительные параметры",
-  "robbo.header.user.dashboard": "Панель управления",
-  "robbo.header.user.profile": "Профиль",
-  "robbo.header.user.signOut": "Выйти"
+  "notification.preferences.notifications.label": "Уведомления"
 }
