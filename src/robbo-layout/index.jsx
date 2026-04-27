@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getConfig } from '@edx/frontend-platform';
+import { FormattedMessage } from '@edx/frontend-platform/i18n';
 import { AppContext } from '@edx/frontend-platform/react';
 
 import './index.scss';
@@ -51,7 +52,7 @@ export const RobboHeader = ({
     }] : []),
     {
       href: catalogUrl,
-      label: 'Course catalog',
+      messageId: 'robbo.header.mainNav.courseCatalog',
       onClick: onCatalogClick,
       section: 'catalog',
     },
@@ -61,14 +62,6 @@ export const RobboHeader = ({
     username && config.ACCOUNT_PROFILE_URL ? {
       href: `${config.ACCOUNT_PROFILE_URL}/u/${username}`,
       label: 'Profile',
-    } : null,
-    config.ACCOUNT_SETTINGS_URL ? {
-      href: config.ACCOUNT_SETTINGS_URL,
-      label: 'Account',
-    } : null,
-    config.ORDER_HISTORY_URL ? {
-      href: config.ORDER_HISTORY_URL,
-      label: 'Order History',
     } : null,
     config.LOGOUT_URL ? {
       href: config.LOGOUT_URL,
@@ -90,13 +83,19 @@ export const RobboHeader = ({
         <nav className="robbo-layout-header__nav" aria-label="Основная навигация">
           {mainLinks.map((item) => (
             <a
-              key={`${item.href}-${item.label}`}
+              key={`${item.href}-${item.messageId || item.label}`}
               className={activeSection === item.section ? 'robbo-layout-header__link active' : 'robbo-layout-header__link'}
               href={item.href}
               onClick={item.onClick}
               aria-current={activeSection === item.section ? 'page' : undefined}
             >
-              {item.label}
+              {item.messageId ? (
+                <FormattedMessage
+                  id={item.messageId}
+                  defaultMessage="Course catalog"
+                  description="Header link to the public course catalog (LMS navbar)"
+                />
+              ) : item.label}
             </a>
           ))}
         </nav>

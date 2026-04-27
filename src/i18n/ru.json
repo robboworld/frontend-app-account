@@ -329,5 +329,6 @@
   "notification.preference.title": "{ text, select, core {Activity notifications} newDiscussionPost {New discussion posts} newQuestionPost {New question posts} contentReported {Reported content} courseUpdates {Course updates} oraStaffNotifications {New ORA submission for staff grading} oraGradeAssigned {Essay assignment grade received} other {{text}} }",
   "notification.preference.type.label": "Тип",
   "notification.preference.web.label": "Интернет",
-  "notification.preferences.notifications.label": "Уведомления"
+  "notification.preferences.notifications.label": "Уведомления",
+  "robbo.header.mainNav.courseCatalog": "Каталог курсов"
 }
