@@ -29,7 +29,7 @@ subscribe(APP_READY, () => {
         <Routes>
           <Route element={(
             <div className="robbo-layout-page">
-              <RobboHeader />
+              <RobboHeader collapseNavIntoUserMenuOnNarrow />
               <main className="flex-grow-1" id="main">
                 <Outlet />
               </main>
