@@ -4,7 +4,7 @@ import 'regenerator-runtime/runtime';
 import 'formdata-polyfill';
 import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
 import {
-  subscribe, initialize, APP_INIT_ERROR, APP_READY, mergeConfig,
+  subscribe, initialize, APP_INIT_ERROR, APP_READY, mergeConfig, getConfig,
 } from '@edx/frontend-platform';
 import React, { StrictMode } from 'react';
 // eslint-disable-next-line import/no-unresolved
@@ -20,8 +20,50 @@ import { RobboFooter, RobboHeader } from './robbo-layout';
 import './index.scss';
 import Head from './head/Head';
 
+const initYandexMetrika = () => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+  const cfg = getConfig();
+  if (!cfg.ENABLE_YANDEX_METRIKA || cfg.YANDEX_METRIKA_COUNTER_ID == null || cfg.YANDEX_METRIKA_COUNTER_ID === '') {
+    return;
+  }
+  const counterId = Number(cfg.YANDEX_METRIKA_COUNTER_ID);
+  if (!Number.isFinite(counterId) || counterId <= 0) {
+    return;
+  }
+  const src = `https://mc.yandex.ru/metrika/tag.js?id=${counterId}`;
+  const alreadyLoaded = Array.from(document.scripts || []).some(
+    (scriptEl) => scriptEl.src === src || scriptEl.src.indexOf('https://mc.yandex.ru/metrika/tag.js') === 0,
+  );
+  if (!alreadyLoaded) {
+    const scriptEl = document.createElement('script');
+    scriptEl.async = true;
+    scriptEl.src = src;
+    const firstScript = document.getElementsByTagName('script')[0];
+    if (firstScript && firstScript.parentNode) {
+      firstScript.parentNode.insertBefore(scriptEl, firstScript);
+    } else {
+      document.head.appendChild(scriptEl);
+    }
+  }
+  window.ym = window.ym || function ymShim() { (window.ym.a = window.ym.a || []).push(arguments); };
+  window.ym.l = 1 * new Date();
+  window.ym(counterId, 'init', {
+    ssr: true,
+    webvisor: true,
+    clickmap: true,
+    ecommerce: 'dataLayer',
+    referrer: document.referrer,
+    url: window.location.href,
+    accurateTrackBounce: true,
+    trackLinks: true,
+  });
+};
+
 const rootNode = createRoot(document.getElementById('root'));
 subscribe(APP_READY, () => {
+  initYandexMetrika();
   rootNode.render(
     <StrictMode>
       <AppProvider store={configureStore()}>
