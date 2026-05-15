@@ -20,6 +20,11 @@ import { RobboFooter, RobboHeader } from './robbo-layout';
 import './index.scss';
 import Head from './head/Head';
 
+// Tutor serves this app at PUBLIC_PATH `/account/`. `/account` (no slash) does not match basename — React renders nothing.
+if (typeof window !== 'undefined' && window.location.pathname === '/account') {
+  window.location.replace(`${window.location.origin}/account/${window.location.search}${window.location.hash}`);
+}
+
 const initYandexMetrika = () => {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
     return;
@@ -83,7 +88,7 @@ subscribe(APP_READY, () => {
               path="/id-verification/*"
               element={<IdVerificationPageSlot />}
             />
-            <Route path="/" element={<AccountSettingsPage />} />
+            <Route index element={<AccountSettingsPage />} />
             <Route path="/notfound" element={<NotFoundPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
