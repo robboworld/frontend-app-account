@@ -2,8 +2,8 @@ import { getConfig } from '@edx/frontend-platform';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { breakpoints, useWindowSize } from '@openedx/paragon';
 import classNames from 'classnames';
-import React from 'react';
-import { NavHashLink } from 'react-router-hash-link';
+import React, { useCallback, useState } from 'react';
+import { HashLink } from 'react-router-hash-link';
 import Scrollspy from 'react-scrollspy';
 import messages from './AccountSettingsPage.messages';
 
@@ -11,6 +11,20 @@ const JumpNav = ({
   intl,
 }) => {
   const stickToTop = useWindowSize().width > breakpoints.small.minWidth;
+  const [currentSectionId, setCurrentSectionId] = useState('basic-information');
+
+  const handleScrollSpyUpdate = useCallback((sectionEl) => {
+    setCurrentSectionId(sectionEl?.id || 'basic-information');
+  }, []);
+
+  const sectionLink = (sectionId, message) => (
+    <HashLink
+      to={`#${sectionId}`}
+      aria-current={currentSectionId === sectionId ? 'page' : undefined}
+    >
+      {message}
+    </HashLink>
+  );
 
   return (
     <div className={classNames('jump-nav px-2.25', { 'jump-nav-sm position-sticky pt-3': stickToTop })}>
@@ -24,40 +38,29 @@ const JumpNav = ({
           'delete-account',
         ]}
         className="list-unstyled"
-        currentClassName="font-weight-bold"
+        currentClassName="jump-nav__item--current"
         offset={-64}
+        onUpdate={handleScrollSpyUpdate}
       >
         <li>
-          <NavHashLink to="#basic-information">
-            {intl.formatMessage(messages['account.settings.section.account.information'])}
-          </NavHashLink>
+          {sectionLink('basic-information', intl.formatMessage(messages['account.settings.section.account.information']))}
         </li>
         <li>
-          <NavHashLink to="#profile-information">
-            {intl.formatMessage(messages['account.settings.section.profile.information'])}
-          </NavHashLink>
+          {sectionLink('profile-information', intl.formatMessage(messages['account.settings.section.profile.information']))}
         </li>
         <li>
-          <NavHashLink to="#notifications">
-            {intl.formatMessage(messages['notification.preferences.notifications.label'])}
-          </NavHashLink>
+          {sectionLink('notifications', intl.formatMessage(messages['notification.preferences.notifications.label']))}
         </li>
         <li>
-          <NavHashLink to="#site-preferences">
-            {intl.formatMessage(messages['account.settings.section.site.preferences'])}
-          </NavHashLink>
+          {sectionLink('site-preferences', intl.formatMessage(messages['account.settings.section.site.preferences']))}
         </li>
         <li>
-          <NavHashLink to="#linked-accounts">
-            {intl.formatMessage(messages['account.settings.section.linked.accounts'])}
-          </NavHashLink>
+          {sectionLink('linked-accounts', intl.formatMessage(messages['account.settings.section.linked.accounts']))}
         </li>
         {getConfig().ENABLE_ACCOUNT_DELETION
           && (
           <li>
-            <NavHashLink to="#delete-account">
-              {intl.formatMessage(messages['account.settings.jump.nav.delete.account'])}
-            </NavHashLink>
+            {sectionLink('delete-account', intl.formatMessage(messages['account.settings.jump.nav.delete.account']))}
           </li>
           )}
       </Scrollspy>

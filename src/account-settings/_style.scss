@@ -1,3 +1,71 @@
+$robbo-account-accent-green: #007a3d;
+$robbo-account-accent-green-hover: #006233;
+$robbo-account-accent-green-subtle-bg: #f0fdf4;
+$robbo-account-jump-nav-text: #4a8f66;
+$robbo-account-jump-nav-active-bar: 3px;
+
+@mixin robbo-account-btn-outline-primary {
+  color: $robbo-account-accent-green;
+  border-color: $robbo-account-accent-green;
+
+  &:visited {
+    color: $robbo-account-accent-green;
+    border-color: $robbo-account-accent-green;
+  }
+
+  &:hover:not(:disabled):not(.disabled),
+  &:active:not(:disabled):not(.disabled) {
+    color: #fff;
+    background-color: $robbo-account-accent-green;
+    border-color: $robbo-account-accent-green;
+  }
+
+  &:focus-visible {
+    color: #fff;
+    background-color: $robbo-account-accent-green;
+    border-color: $robbo-account-accent-green;
+    box-shadow: 0 0 0 0.2rem rgba($robbo-account-accent-green, 0.35);
+  }
+}
+
+@mixin robbo-account-btn-primary {
+  background-color: $robbo-account-accent-green;
+  border-color: $robbo-account-accent-green;
+  color: #fff;
+
+  &:visited {
+    color: #fff;
+  }
+
+  &:hover:not(:disabled):not(.disabled),
+  &:active:not(:disabled):not(.disabled) {
+    background-color: $robbo-account-accent-green-hover;
+    border-color: $robbo-account-accent-green-hover;
+    color: #fff;
+  }
+
+  &:focus-visible {
+    background-color: $robbo-account-accent-green;
+    border-color: $robbo-account-accent-green;
+    color: #fff;
+    box-shadow: 0 0 0 0.2rem rgba($robbo-account-accent-green, 0.35);
+  }
+}
+
+@mixin robbo-account-text-link {
+  color: $robbo-account-accent-green;
+
+  &:hover,
+  &:focus {
+    color: $robbo-account-accent-green-hover;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba($robbo-account-accent-green, 0.35);
+    outline-offset: 2px;
+  }
+}
+
 .page__account-settings {
   .form-group {
     margin-bottom: 1.5rem;
@@ -7,28 +75,94 @@
     margin-bottom: .25rem;
   }
 
-  .btn-link {
+  .btn-primary,
+  .pgn__stateful-btn.btn-primary {
+    @include robbo-account-btn-primary;
+  }
+
+  .btn-outline-primary,
+  a.btn-outline-primary {
+    @include robbo-account-btn-outline-primary;
+  }
+
+  // «Редактировать», «Добавить…» — кнопки действий в форме, не inline-ссылки в тексте.
+  .btn-link,
+  a.btn-link,
+  .pgn__stateful-btn.btn-link {
+    @include robbo-account-text-link;
     line-height: 1.2;
     border: none;
     padding: 0;
     display: inline-block;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+
+  .alert-info {
+    a,
+    .pgn__hyperlink {
+      @include robbo-account-text-link;
+    }
+  }
+
+  // Standalone Paragon Hyperlink (e.g. delete-account «изменить email, имя или пароль»).
+  a.pgn__hyperlink.default-link.standalone-link {
+    @include robbo-account-text-link;
+    text-decoration: underline;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
   }
 
   .jump-nav-sm {
     top: 1rem;
   }
 
+  // Боковая навигация по разделам (Scrollspy + NavHashLink) — меню, не inline-ссылки.
   .jump-nav {
-
     li {
-      margin-bottom: .5rem;
+      margin-bottom: 0.125rem;
 
       a {
-        text-decoration: underline;
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border-radius: $border-radius;
+        border-left: $robbo-account-jump-nav-active-bar solid transparent;
+        color: $robbo-account-jump-nav-text;
+        font-weight: 400;
+        line-height: 1.35;
+        text-decoration: none;
+        transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
+
+        &:hover,
+        &:focus {
+          color: $robbo-account-accent-green;
+          background-color: $robbo-account-accent-green-subtle-bg;
+          text-decoration: none;
+        }
+
+        &:focus-visible {
+          outline: 2px solid rgba($robbo-account-accent-green, 0.35);
+          outline-offset: 2px;
+        }
+      }
+
+      &.jump-nav__item--current > a {
+        color: $robbo-account-accent-green;
+        font-weight: 600;
+        background-color: $robbo-account-accent-green-subtle-bg;
+        border-left-color: $robbo-account-accent-green;
+        text-decoration: none;
       }
     }
   }
-
 
   .custom-switch {
     padding: 0;
@@ -39,7 +173,8 @@
       line-height: 1.6rem;
     }
   }
-  .grayed-out{
+
+  .grayed-out {
     opacity: 0.6; /* Real browsers */
     filter: alpha(opacity = 60); /* MSIE */
   }
