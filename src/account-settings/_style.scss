@@ -1,3 +1,5 @@
+// Match profile MFE and Robbo footer/header content width (`robbo-layout/index.scss`).
+$robbo-account-content-max-width: 1162px;
 $robbo-account-accent-green: #007a3d;
 $robbo-account-accent-green-hover: #006233;
 $robbo-account-accent-green-subtle-bg: #f0fdf4;
@@ -67,6 +69,23 @@ $robbo-account-jump-nav-active-bar: 3px;
 }
 
 .page__account-settings {
+  width: 100%;
+  max-width: $robbo-account-content-max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+
+  @include media-breakpoint-up(lg) {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  > h1 {
+    text-align: center;
+  }
+
   .form-group {
     margin-bottom: 1.5rem;
   }
