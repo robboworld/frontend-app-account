@@ -6,6 +6,8 @@ $fa-font-path: "~font-awesome/fonts";
 @import "~@openedx/paragon/scss/core/core";
 @import "~@edx/brand/paragon/overrides";
 
+@import './sass/robbo-brand-fonts';
+@import './sass/robbo-brand-tokens';
 @import "./account-settings/style";
 @import "./id-verification/id-verification";
 

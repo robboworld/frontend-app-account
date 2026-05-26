@@ -1,9 +1,9 @@
 // Match profile MFE and Robbo footer/header content width (`robbo-layout/index.scss`).
 $robbo-account-content-max-width: 1162px;
-$robbo-account-accent-green: #007a3d;
-$robbo-account-accent-green-hover: #006233;
-$robbo-account-accent-green-subtle-bg: #f0fdf4;
-$robbo-account-jump-nav-text: #4a8f66;
+$robbo-account-accent-green: $robbo-brand-primary-dark;
+$robbo-account-accent-green-hover: $robbo-brand-primary-darker;
+$robbo-account-accent-green-subtle-bg: $robbo-ui-primary-light;
+$robbo-account-jump-nav-text: mix($robbo-brand-primary, #ffffff, 45%);
 $robbo-account-jump-nav-active-bar: 3px;
 
 @mixin robbo-account-btn-outline-primary {
