@@ -441,17 +441,6 @@ $robbo-account-form-action-font-weight: 400;
     }
   }
 
-  // Standalone Paragon Hyperlink (e.g. delete-account «изменить email, имя или пароль»).
-  a.pgn__hyperlink.default-link.standalone-link {
-    @include robbo-account-text-link;
-    text-decoration: underline;
-
-    &:hover,
-    &:focus {
-      text-decoration: underline;
-    }
-  }
-
   .jump-nav-sm {
     top: $robbo-account-space-lg;
     z-index: 2;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getConfig } from '@edx/frontend-platform';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { Button, Hyperlink } from '@openedx/paragon';
+import { Button } from '@openedx/paragon';
 
 // Actions
 import {
@@ -100,11 +100,6 @@ export class DeleteAccount extends React.Component {
                   messages['account.settings.delete.account.text.warning'],
                   { siteName: getConfig().SITE_NAME },
                 )}
-              </p>
-              <p>
-                <Hyperlink destination="https://help.edx.org/edxlearner/s/topic/0TOQq0000001UdZOAU/account-basics">
-                  {intl.formatMessage(messages['account.settings.delete.account.text.change.instead'])}
-                </Hyperlink>
               </p>
               <p className="account-settings-delete__actions">
                 <Button
