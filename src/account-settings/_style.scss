@@ -213,6 +213,7 @@ $robbo-account-form-action-font-weight: 400;
     border-color: $robbo-account-accent-green;
   }
 
+  &:focus,
   &:focus-visible {
     color: #fff;
     background-color: $robbo-account-accent-green;
@@ -238,6 +239,7 @@ $robbo-account-form-action-font-weight: 400;
     color: #fff;
   }
 
+  &:focus,
   &:focus-visible {
     background-color: $robbo-account-accent-green;
     border-color: $robbo-account-accent-green;
