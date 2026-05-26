@@ -120,6 +120,11 @@ const messages = defineMessages({
     defaultMessage: 'Overrides account-wide settings',
     description: 'Dropdown applies to specific course',
   },
+  notificationAccountScopeName: {
+    id: 'notification.dropdown.accountScopeName',
+    defaultMessage: 'Account',
+    description: 'Label for account-wide notification scope in the course dropdown',
+  },
 });
 
 export default messages;

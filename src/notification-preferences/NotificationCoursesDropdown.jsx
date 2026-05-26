@@ -9,6 +9,8 @@ import { selectCourseList, selectCourseListStatus, selectSelectedCourseId } from
 import { fetchCourseList, setSelectedCourse } from './data/thunks';
 import messages from './messages';
 
+const isAccountScopeCourse = (course) => course && (course.id === '' || course.name === 'Account');
+
 const NotificationCoursesDropdown = () => {
   const intl = useIntl();
   const dispatch = useDispatch();
@@ -19,6 +21,16 @@ const NotificationCoursesDropdown = () => {
     () => coursesList.find((course) => course.id === selectedCourseId),
     [coursesList, selectedCourseId],
   );
+
+  const getCourseDisplayName = useCallback((course) => {
+    if (!course) {
+      return '';
+    }
+    if (isAccountScopeCourse(course)) {
+      return intl.formatMessage(messages.notificationAccountScopeName);
+    }
+    return course.name;
+  }, [intl]);
 
   const handleCourseSelection = useCallback((courseId) => {
     dispatch(setSelectedCourse(courseId));
@@ -44,7 +56,7 @@ const NotificationCoursesDropdown = () => {
             id="course-dropdown-btn"
             className="w-100 justify-content-between small"
           >
-            {selectedCourse?.name}
+            {getCourseDisplayName(selectedCourse)}
           </Dropdown.Toggle>
           <Dropdown.Menu className="w-100">
             {coursesList.map((course) => (
@@ -55,13 +67,13 @@ const NotificationCoursesDropdown = () => {
                 eventKey={course.id}
                 onSelect={handleCourseSelection}
               >
-                {course.name}
+                {getCourseDisplayName(course)}
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>
         </Dropdown>
         <span className="x-small text-gray-500">
-          {selectedCourse?.name === 'Account'
+          {isAccountScopeCourse(selectedCourse)
             ? intl.formatMessage(messages.notificationDropdownApplies)
             : intl.formatMessage(messages.notificationCourseDropdownApplies)}
         </span>
