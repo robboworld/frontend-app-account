@@ -2,7 +2,7 @@ import { getConfig } from '@edx/frontend-platform';
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { breakpoints, useWindowSize } from '@openedx/paragon';
 import classNames from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import Scrollspy from 'react-scrollspy';
 import messages from './AccountSettingsPage.messages';
@@ -10,8 +10,45 @@ import messages from './AccountSettingsPage.messages';
 const JumpNav = ({
   intl,
 }) => {
-  const stickToTop = useWindowSize().width > breakpoints.small.minWidth;
+  const { width } = useWindowSize();
+  const isSidebarNav = width >= breakpoints.large.minWidth;
   const [currentSectionId, setCurrentSectionId] = useState('basic-information');
+
+  const sections = useMemo(() => {
+    const items = [
+      {
+        id: 'basic-information',
+        label: intl.formatMessage(messages['account.settings.section.account.information']),
+      },
+      {
+        id: 'profile-information',
+        label: intl.formatMessage(messages['account.settings.section.profile.information']),
+      },
+      {
+        id: 'notifications',
+        label: intl.formatMessage(messages['notification.preferences.notifications.label']),
+      },
+      {
+        id: 'site-preferences',
+        label: intl.formatMessage(messages['account.settings.section.site.preferences']),
+      },
+      {
+        id: 'linked-accounts',
+        label: intl.formatMessage(messages['account.settings.section.linked.accounts']),
+      },
+    ];
+
+    if (getConfig().ENABLE_ACCOUNT_DELETION) {
+      items.push({
+        id: 'delete-account',
+        label: intl.formatMessage(messages['account.settings.jump.nav.delete.account']),
+      });
+    }
+
+    return items;
+  }, [intl]);
+
+  const scrollSpyItems = useMemo(() => sections.map((section) => section.id), [sections]);
 
   const handleScrollSpyUpdate = useCallback((sectionEl) => {
     setCurrentSectionId(sectionEl?.id || 'basic-information');
@@ -26,43 +63,24 @@ const JumpNav = ({
     </HashLink>
   );
 
+  if (!isSidebarNav) {
+    return null;
+  }
+
   return (
-    <div className={classNames('jump-nav px-2.25', { 'jump-nav-sm position-sticky pt-3': stickToTop })}>
+    <div className={classNames('jump-nav', 'jump-nav--sidebar', 'jump-nav-sm', 'position-sticky')}>
       <Scrollspy
-        items={[
-          'basic-information',
-          'profile-information',
-          'notifications',
-          'site-preferences',
-          'linked-accounts',
-          'delete-account',
-        ]}
-        className="list-unstyled"
+        items={scrollSpyItems}
+        className="list-unstyled jump-nav__list"
         currentClassName="jump-nav__item--current"
         offset={-64}
         onUpdate={handleScrollSpyUpdate}
       >
-        <li>
-          {sectionLink('basic-information', intl.formatMessage(messages['account.settings.section.account.information']))}
-        </li>
-        <li>
-          {sectionLink('profile-information', intl.formatMessage(messages['account.settings.section.profile.information']))}
-        </li>
-        <li>
-          {sectionLink('notifications', intl.formatMessage(messages['notification.preferences.notifications.label']))}
-        </li>
-        <li>
-          {sectionLink('site-preferences', intl.formatMessage(messages['account.settings.section.site.preferences']))}
-        </li>
-        <li>
-          {sectionLink('linked-accounts', intl.formatMessage(messages['account.settings.section.linked.accounts']))}
-        </li>
-        {getConfig().ENABLE_ACCOUNT_DELETION
-          && (
-          <li>
-            {sectionLink('delete-account', intl.formatMessage(messages['account.settings.jump.nav.delete.account']))}
+        {sections.map(({ id, label }) => (
+          <li key={id}>
+            {sectionLink(id, label)}
           </li>
-          )}
+        ))}
       </Scrollspy>
     </div>
   );

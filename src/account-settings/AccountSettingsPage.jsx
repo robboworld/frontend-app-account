@@ -733,8 +733,8 @@ class AccountSettingsPage extends React.Component {
           />
         </div>
         {/* Robbo: social profile links (LinkedIn/Facebook/Twitter) intentionally omitted. */}
-        <div className="border border-light-700" />
-        <div className="mt-6" id="notifications" ref={this.navLinkRefs['#notifications']}>
+        <div className="page__account-settings__divider border border-light-700" />
+        <div className="account-section mt-0" id="notifications" ref={this.navLinkRefs['#notifications']}>
           <NotificationSettings />
         </div>
         <div className="account-section mb-5" id="site-preferences" ref={this.navLinkRefs['#site-preferences']}>
@@ -816,21 +816,19 @@ class AccountSettingsPage extends React.Component {
     } = this.props;
 
     return (
-      <div className="page__account-settings container-fluid py-5">
+      <div className="page__account-settings container-fluid">
         {this.renderDuplicateTpaProviderMessage()}
-        <h1 className="mb-4">
-          {this.props.intl.formatMessage(messages['account.settings.page.heading'])}
-        </h1>
-        <div>
-          <div className="row">
-            <div className="col-md-2">
-              <JumpNav />
-            </div>
-            <div className="col-md-10">
-              {loading ? this.renderLoading() : null}
-              {loaded ? this.renderContent() : null}
-              {loadingError ? this.renderError() : null}
-            </div>
+        <div className="page__account-settings__layout row">
+          <nav
+            className="col-lg-3 page__account-settings__nav d-none d-lg-block"
+            aria-label={this.props.intl.formatMessage(messages['account.settings.jump.nav.aria'])}
+          >
+            <JumpNav />
+          </nav>
+          <div className="col-12 col-lg-9 page__account-settings__main">
+            {loading ? this.renderLoading() : null}
+            {loaded ? this.renderContent() : null}
+            {loadingError ? this.renderError() : null}
           </div>
         </div>
       </div>

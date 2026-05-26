@@ -5,10 +5,10 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import {
   Button, Form, StatefulButton,
 } from '@openedx/paragon';
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import SwitchContent from './SwitchContent';
+import EmptyContent from './EmptyContent';
+import EditButton from './EditButton';
 import messages from './AccountSettingsPage.messages';
 
 import {
@@ -63,14 +63,18 @@ const EditableSelectField = (props) => {
 
   const renderEmptyLabel = () => {
     if (isEditable) {
-      return <Button variant="link" onClick={handleEdit} className="p-0">{emptyLabel}</Button>;
+      return (
+        <EmptyContent onClick={handleEdit}>
+          {emptyLabel}
+        </EmptyContent>
+      );
     }
     return <span className="text-muted">{emptyLabel}</span>;
   };
 
   const renderValue = (rawValue) => {
     if (!rawValue) {
-      return renderEmptyLabel();
+      return null;
     }
     let finalValue = rawValue;
 
@@ -98,6 +102,9 @@ const EditableSelectField = (props) => {
       value: confirmationValue,
     });
   };
+
+  const displayedValue = renderValue(value);
+
   const selectOptions = options.map((option) => {
     if (option.group) {
       // If the option has a 'group' property, it represents an element with sub-options.
@@ -186,12 +193,16 @@ const EditableSelectField = (props) => {
             <div className="d-flex align-items-start">
               <h6 aria-level="3">{label}</h6>
               {isEditable ? (
-                <Button variant="link" onClick={handleEdit} className="ml-3">
-                  <FontAwesomeIcon className="mr-1" icon={faPencilAlt} />{intl.formatMessage(messages['account.settings.editable.field.action.edit'])}
-                </Button>
+                <EditButton onClick={handleEdit} />
               ) : null}
             </div>
-            <p data-hj-suppress className={isGrayedOut ? 'grayed-out' : null}>{renderValue(value)}</p>
+            {displayedValue ? (
+              <p data-hj-suppress className={isGrayedOut ? 'grayed-out' : null}>
+                {displayedValue}
+              </p>
+            ) : (
+              renderEmptyLabel()
+            )}
             <p className="small text-muted mt-n2">{renderConfirmationMessage() || helpText}</p>
           </div>
         ),

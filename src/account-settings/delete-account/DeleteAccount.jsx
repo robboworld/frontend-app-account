@@ -106,7 +106,7 @@ export class DeleteAccount extends React.Component {
                   {intl.formatMessage(messages['account.settings.delete.account.text.change.instead'])}
                 </Hyperlink>
               </p>
-              <p>
+              <p className="account-settings-delete__actions">
                 <Button
                   variant="outline-danger"
                   onClick={canDelete ? this.props.deleteAccountConfirmation : null}

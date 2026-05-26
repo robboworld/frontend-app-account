@@ -3,10 +3,201 @@ $robbo-account-content-max-width: 1162px;
 $robbo-account-accent-green: $robbo-brand-primary-dark;
 $robbo-account-accent-green-hover: $robbo-brand-primary-darker;
 $robbo-account-accent-green-subtle-bg: $robbo-ui-primary-light;
-$robbo-account-jump-nav-text: mix($robbo-brand-primary, #ffffff, 45%);
+// Inactive jump-nav links (readable on white; active state uses accent green).
+$robbo-account-jump-nav-text: $robbo-brand-coal;
 $robbo-account-jump-nav-active-bar: 3px;
+$robbo-account-header-gap: 1.25rem;
+$robbo-account-space-xs: 0.25rem;
+$robbo-account-space-sm: 0.5rem;
+$robbo-account-space-md: 0.75rem;
+$robbo-account-space-lg: 1rem;
+$robbo-account-space-xl: 1.25rem;
+$robbo-account-section-gap: $robbo-account-space-lg;
+$robbo-account-field-radius: 0.625rem;
+$robbo-account-field-border-color: rgba(0, 0, 0, 0.08);
+$robbo-account-field-bg: #fafafa;
+$robbo-account-field-padding: $robbo-account-space-lg $robbo-account-space-xl;
+$robbo-account-field-padding-mobile: $robbo-account-space-lg;
+$robbo-account-text-primary: #111827;
+$robbo-account-text-secondary: #6b7280;
+$robbo-account-section-title-size: 1.25rem;
+$robbo-account-field-title-size: 0.9375rem;
+$robbo-account-field-value-size: 1rem;
+$robbo-account-helper-size: 0.8125rem;
+// Save / Cancel in field editors (not bold — matches Paragon default .btn).
+$robbo-account-form-action-font-weight: 400;
+
+@mixin robbo-account-field-card {
+  margin-bottom: 0;
+  padding: $robbo-account-field-padding-mobile;
+  background: $robbo-account-field-bg;
+  border: 1px solid $robbo-account-field-border-color;
+  border-radius: $robbo-account-field-radius;
+
+  @include media-breakpoint-up(lg) {
+    padding: $robbo-account-field-padding;
+  }
+}
+
+@mixin robbo-account-form-field-controls {
+  .form-control,
+  .pgn__form-control,
+  select.form-control,
+  textarea.form-control {
+    min-height: 2.75rem;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: $robbo-account-field-radius;
+    background-color: #fff;
+    font-size: $robbo-account-field-value-size;
+    color: $robbo-account-text-primary;
+
+    &:hover:not(:disabled):not(:focus) {
+      border-color: $robbo-account-field-border-color;
+    }
+
+    &:focus {
+      border-color: $robbo-account-accent-green;
+      box-shadow: 0 0 0 0.2rem rgba($robbo-account-accent-green, 0.25);
+    }
+  }
+
+  textarea.form-control {
+    min-height: 6rem;
+  }
+}
+
+// Inline edit (SwitchContent → form); view mode uses .form-group card.
+@mixin robbo-account-field-editor {
+  @include robbo-account-field-card;
+
+  .pgn__form-group {
+    margin-bottom: $robbo-account-space-md;
+  }
+
+  label.h6,
+  .pgn__form-label.h6 {
+    margin-bottom: $robbo-account-space-sm;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 600;
+    line-height: 1.35;
+    color: $robbo-account-text-primary;
+  }
+
+  @include robbo-account-form-field-controls;
+
+  .form-text {
+    margin-top: $robbo-account-space-xs;
+    font-size: $robbo-account-helper-size;
+    line-height: 1.45;
+    color: $robbo-account-text-secondary;
+  }
+
+  > p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    margin-top: $robbo-account-space-sm;
+    margin-bottom: 0;
+  }
+
+  .btn-primary,
+  .pgn__stateful-btn.btn-primary,
+  .btn-outline-primary {
+    min-height: 2.75rem;
+  }
+}
+
+@mixin robbo-account-section-field-typography {
+  h6,
+  .h6 {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 600;
+    line-height: 1.35;
+    color: $robbo-account-text-primary;
+  }
+
+  > .d-flex.align-items-start {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    margin-bottom: $robbo-account-space-sm;
+  }
+
+  > p:not(.small):not(.form-text) {
+    margin-bottom: $robbo-account-space-xs;
+    font-size: $robbo-account-field-value-size;
+    font-weight: 600;
+    line-height: 1.4;
+    color: $robbo-account-text-primary;
+    overflow-wrap: anywhere;
+  }
+
+  .small.text-muted,
+  .form-text {
+    margin-top: 0;
+    font-size: $robbo-account-helper-size;
+    line-height: 1.45;
+    color: $robbo-account-text-secondary;
+  }
+
+  // «Изменить» в шапке карточки — как profile-page__edit-btn.
+  .account-settings__edit-btn {
+    flex-shrink: 0;
+    color: $robbo-account-text-secondary;
+    font-size: $robbo-account-helper-size;
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: $robbo-account-accent-green;
+      text-decoration: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba($robbo-account-accent-green, 0.35);
+      outline-offset: 2px;
+      border-radius: 0.25rem;
+    }
+  }
+
+  // «+ Добавить …» — как profile-page__empty-cta.
+  .account-settings__empty-cta {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    min-height: 2.75rem;
+    padding: $robbo-account-space-sm 0;
+    color: $robbo-account-accent-green;
+    font-size: $robbo-account-field-value-size;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: left;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: $robbo-account-accent-green-hover;
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba($robbo-account-accent-green, 0.35);
+      outline-offset: 2px;
+      border-radius: 0.25rem;
+    }
+  }
+}
 
 @mixin robbo-account-btn-outline-primary {
+  font-weight: $robbo-account-form-action-font-weight;
   color: $robbo-account-accent-green;
   border-color: $robbo-account-accent-green;
 
@@ -31,6 +222,7 @@ $robbo-account-jump-nav-active-bar: 3px;
 }
 
 @mixin robbo-account-btn-primary {
+  font-weight: $robbo-account-form-action-font-weight;
   background-color: $robbo-account-accent-green;
   border-color: $robbo-account-accent-green;
   color: #fff;
@@ -77,17 +269,136 @@ $robbo-account-jump-nav-active-bar: 3px;
   padding-right: 20px;
   box-sizing: border-box;
 
+  padding-top: $robbo-account-header-gap;
+  padding-bottom: 2.5rem;
+
   @include media-breakpoint-up(lg) {
     padding-left: 28px;
     padding-right: 28px;
   }
 
-  > h1 {
-    text-align: center;
+  &__layout {
+    row-gap: $robbo-account-space-lg;
+
+    @include media-breakpoint-up(lg) {
+      align-items: flex-start;
+      row-gap: 0;
+    }
+  }
+
+  &__nav {
+    position: sticky;
+    top: $robbo-account-space-lg;
+    align-self: flex-start;
+    min-width: 0;
+  }
+
+  &__main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $robbo-account-space-xl;
+
+    @include media-breakpoint-up(lg) {
+      gap: $robbo-account-space-xl * 2;
+    }
+  }
+
+  &__divider {
+    margin-top: $robbo-account-space-lg;
+    margin-bottom: $robbo-account-space-lg;
+    border-color: $robbo-account-field-border-color !important;
+  }
+
+  .account-section {
+    display: flex;
+    flex-direction: column;
+    gap: $robbo-account-section-gap;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+
+    > .section-heading,
+    > .notification-heading,
+    .section-heading {
+      font-size: clamp(1.0625rem, 4vw, #{$robbo-account-section-title-size});
+      font-weight: 700;
+      line-height: 1.3;
+      color: $robbo-account-text-primary;
+      margin-bottom: 0;
+    }
+
+    @include media-breakpoint-down(lg) {
+      > .section-heading,
+      > .notification-heading,
+      .section-heading {
+        text-align: center;
+      }
+    }
+
+    > p:not(.small):not(.form-text) {
+      color: $robbo-account-text-secondary;
+      font-size: $robbo-account-helper-size;
+      line-height: 1.45;
+      margin-bottom: $robbo-account-space-sm;
+    }
+
+    // Edit mode (form) — same card + inputs as profile field editor.
+    form {
+      @include robbo-account-field-editor;
+    }
+
+    .form-group {
+      @include robbo-account-field-card;
+      @include robbo-account-section-field-typography;
+
+      @include media-breakpoint-down(sm) {
+        > p.text-truncate {
+          white-space: normal;
+          overflow: visible;
+          text-overflow: unset;
+        }
+      }
+    }
+  }
+
+  #delete-account.account-section {
+    .account-settings-delete__actions {
+      margin-top: $robbo-account-space-md;
+      margin-bottom: 0;
+    }
+
+    @include media-breakpoint-down(lg) {
+      .account-settings-delete__actions {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+
+  #notifications.account-section {
+    .notification-preferences {
+      @include robbo-account-field-card;
+    }
+
+    .notification-heading {
+      margin-bottom: $robbo-account-space-sm;
+
+      @include media-breakpoint-down(lg) {
+        text-align: center;
+      }
+    }
+
+    .font-size-14,
+    .text-gray-700 {
+      color: $robbo-account-text-secondary;
+      font-size: $robbo-account-helper-size;
+      line-height: 1.45;
+    }
   }
 
   .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
   }
 
   h6, .h6 {
@@ -104,9 +415,9 @@ $robbo-account-jump-nav-active-bar: 3px;
     @include robbo-account-btn-outline-primary;
   }
 
-  // «Редактировать», «Добавить…» — кнопки действий в форме, не inline-ссылки в тексте.
-  .btn-link,
-  a.btn-link,
+  // Ссылки в карточках (не «Изменить» / не «+ Добавить …»).
+  .btn-link:not(.account-settings__empty-cta):not(.account-settings__edit-btn),
+  a.btn-link:not(.account-settings__empty-cta):not(.account-settings__edit-btn),
   .pgn__stateful-btn.btn-link {
     @include robbo-account-text-link;
     line-height: 1.2;
@@ -140,10 +451,11 @@ $robbo-account-jump-nav-active-bar: 3px;
   }
 
   .jump-nav-sm {
-    top: 1rem;
+    top: $robbo-account-space-lg;
+    z-index: 2;
   }
 
-  // Боковая навигация по разделам (Scrollspy + NavHashLink) — меню, не inline-ссылки.
+  // Боковая навигация по разделам (Scrollspy + NavHashLink).
   .jump-nav {
     li {
       margin-bottom: 0.125rem;

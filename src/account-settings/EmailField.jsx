@@ -6,10 +6,12 @@ import {
   Button, StatefulButton, Form,
 } from '@openedx/paragon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 import Alert from './Alert';
 import SwitchContent from './SwitchContent';
+import EmptyContent from './EmptyContent';
+import EditButton from './EditButton';
 import messages from './AccountSettingsPage.messages';
 
 import {
@@ -88,16 +90,23 @@ const EmailField = (props) => {
 
   const renderEmptyLabel = () => {
     if (isEditable) {
-      return <Button variant="link" onClick={handleEdit} className="p-0">{emptyLabel}</Button>;
+      return (
+        <EmptyContent onClick={handleEdit}>
+          {emptyLabel}
+        </EmptyContent>
+      );
     }
     return <span className="text-muted">{emptyLabel}</span>;
   };
 
-  const renderValue = () => {
+  const renderDisplayBody = () => {
     if (confirmationValue) {
-      return renderConfirmationValue();
+      return <p data-hj-suppress>{renderConfirmationValue()}</p>;
     }
-    return value || renderEmptyLabel();
+    if (value) {
+      return <p data-hj-suppress>{value}</p>;
+    }
+    return renderEmptyLabel();
   };
 
   return (
@@ -156,13 +165,10 @@ const EmailField = (props) => {
             <div className="d-flex align-items-start">
               <h6 aria-level="3">{label}</h6>
               {isEditable ? (
-                <Button variant="link" onClick={handleEdit} className="ml-3">
-                  <FontAwesomeIcon className="mr-1" icon={faPencilAlt} />
-                  {intl.formatMessage(messages['account.settings.editable.field.action.edit'])}
-                </Button>
+                <EditButton onClick={handleEdit} />
               ) : null}
             </div>
-            <p data-hj-suppress>{renderValue()}</p>
+            {renderDisplayBody()}
             {renderConfirmationMessage() || <p className="small text-muted mt-n2">{helpText}</p>}
           </div>
         ),

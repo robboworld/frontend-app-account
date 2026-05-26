@@ -504,6 +504,16 @@ const messages = defineMessages({
     defaultMessage: 'Add LinkedIn profile',
     description: 'Placeholder for an empty LinkedIn field',
   },
+  'account.settings.jump.nav.aria': {
+    id: 'account.settings.jump.nav.aria',
+    defaultMessage: 'Account settings sections',
+    description: 'Accessible name for the account settings section navigation',
+  },
+  'account.settings.jump.nav.picker.label': {
+    id: 'account.settings.jump.nav.picker.label',
+    defaultMessage: 'Section',
+    description: 'Visible label for the mobile section picker on account settings',
+  },
   'account.settings.jump.nav.delete.account': {
     id: 'account.settings.jump.nav.delete.account',
     defaultMessage: 'Delete My Account',
