@@ -221,6 +221,21 @@ const messages = defineMessages({
     defaultMessage: 'You receive messages from {siteName} and course teams at this address.',
     description: 'Help text for the account settings email field.',
   },
+  'account.settings.field.phone.number': {
+    id: 'account.settings.field.phone.number',
+    defaultMessage: 'Phone number',
+    description: 'Label for account settings phone number field.',
+  },
+  'account.settings.field.phone.number.empty': {
+    id: 'account.settings.field.phone.number.empty',
+    defaultMessage: 'Add phone number',
+    description: 'Placeholder for empty account settings phone number field.',
+  },
+  'account.settings.field.phone.number.invalid': {
+    id: 'account.settings.field.phone.number.invalid',
+    defaultMessage: 'Enter a valid phone number: +7 and 10 digits for Russia, or international format with «+»',
+    description: 'Validation error for account settings phone number field.',
+  },
   'account.settings.field.secondary.email': {
     id: 'account.settings.field.secondary.email',
     defaultMessage: 'Recovery email address',

@@ -23,9 +23,15 @@ import {
   fetchSettings,
   saveMultipleSettings,
   saveSettings,
+  saveSettingsFailure,
   updateDraft,
   beginNameChange,
 } from './data/actions';
+import {
+  isValidPhoneNumber,
+  normalizeRobboPhoneNumber,
+  sanitizePhoneInput,
+} from './data/utils/phoneValidation';
 import { accountSettingsPageSelector } from './data/selectors';
 import PageLoading from './PageLoading';
 import JumpNav from './JumpNav';
@@ -173,12 +179,29 @@ class AccountSettingsPage extends React.Component {
   };
 
   handleEditableFieldChange = (name, value) => {
-    this.props.updateDraft(name, value);
+    const nextValue = name === 'phone_number' ? sanitizePhoneInput(value) : value;
+    this.props.updateDraft(name, nextValue);
   };
 
   handleSubmit = (formId, values) => {
     if (formId === FIELD_LABELS.COUNTRY && this.isDisabledCountry(values)) {
       return;
+    }
+
+    let commitValues = values;
+    if (formId === 'phone_number') {
+      const normalized = normalizeRobboPhoneNumber(values);
+      if (!isValidPhoneNumber(normalized)) {
+        this.props.saveSettingsFailure({
+          fieldErrors: {
+            phone_number: this.props.intl.formatMessage(
+              messages['account.settings.field.phone.number.invalid'],
+            ),
+          },
+        });
+        return;
+      }
+      commitValues = normalized || null;
     }
 
     const { formValues } = this.props;
@@ -191,7 +214,7 @@ class AccountSettingsPage extends React.Component {
           : field)),
       };
     }
-    this.props.saveSettings(formId, values, extendedProfileObject);
+    this.props.saveSettings(formId, commitValues, extendedProfileObject);
   };
 
   handleSubmitProfileName = (formId, values) => {
@@ -638,6 +661,17 @@ class AccountSettingsPage extends React.Component {
             isEditable={this.isEditable('email')}
             {...editableFieldProps}
           />
+          <EditableField
+            name="phone_number"
+            type="tel"
+            value={this.props.formValues.phone_number || ''}
+            label={this.props.intl.formatMessage(messages['account.settings.field.phone.number'])}
+            emptyLabel={this.props.intl.formatMessage(messages['account.settings.field.phone.number.empty'])}
+            isEditable={this.isEditable('phone_number')}
+            inputMode="tel"
+            autoComplete="tel"
+            {...editableFieldProps}
+          />
           {this.renderSecondaryEmailField(editableFieldProps)}
           <ResetPassword email={this.props.formValues.email} />
           {(!getConfig().ENABLE_COPPA_COMPLIANCE)
@@ -905,6 +939,7 @@ AccountSettingsPage.propTypes = {
   updateDraft: PropTypes.func.isRequired,
   saveMultipleSettings: PropTypes.func.isRequired,
   saveSettings: PropTypes.func.isRequired,
+  saveSettingsFailure: PropTypes.func.isRequired,
   fetchSettings: PropTypes.func.isRequired,
   beginNameChange: PropTypes.func.isRequired,
   fetchCourseList: PropTypes.func.isRequired,
@@ -975,6 +1010,7 @@ export default withLocation(withNavigate(connect(accountSettingsPageSelector, {
   fetchCourseList,
   fetchSettings,
   saveSettings,
+  saveSettingsFailure,
   saveMultipleSettings,
   updateDraft,
   fetchSiteLanguages,
