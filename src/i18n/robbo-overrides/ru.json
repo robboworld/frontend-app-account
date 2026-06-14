@@ -12,7 +12,8 @@
   "robbo.header.user.signOut": "Выйти",
   "account.settings.field.phone.number": "Номер телефона",
   "account.settings.field.phone.number.empty": "Добавить номер телефона",
-  "account.settings.field.phone.number.invalid": "Укажите корректный номер: +7 и 10 цифр для России или международный формат с «+»",
+  "account.settings.field.phone.number.invalid": "Укажите корректный номер телефона для выбранной страны",
+  "account.settings.field.phone.number.country.aria": "Код страны",
   "account.settings.section.linked.accounts": "Подключённые учётные записи",
   "account.settings.section.linked.accounts.description": "Вы можете связать свои учётные записи, чтобы упростить вход в {siteName}.",
   "account.settings.sso.no.providers": "Сейчас нет доступных учётных записей для подключения."

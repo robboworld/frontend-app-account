@@ -30,7 +30,6 @@ import {
 import {
   isValidPhoneNumber,
   normalizeRobboPhoneNumber,
-  sanitizePhoneInput,
 } from './data/utils/phoneValidation';
 import { accountSettingsPageSelector } from './data/selectors';
 import PageLoading from './PageLoading';
@@ -179,8 +178,7 @@ class AccountSettingsPage extends React.Component {
   };
 
   handleEditableFieldChange = (name, value) => {
-    const nextValue = name === 'phone_number' ? sanitizePhoneInput(value) : value;
-    this.props.updateDraft(name, nextValue);
+    this.props.updateDraft(name, value);
   };
 
   handleSubmit = (formId, values) => {

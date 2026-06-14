@@ -2,15 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { injectIntl, intlShape, getLocale } from '@edx/frontend-platform/i18n';
 import {
   Button, Form, StatefulButton,
 } from '@openedx/paragon';
+import PhoneInput from 'react-phone-number-input';
+import en from 'react-phone-number-input/locale/en';
+import ru from 'react-phone-number-input/locale/ru';
 
 import SwitchContent from './SwitchContent';
 import EmptyContent from './EmptyContent';
 import EditButton from './EditButton';
 import messages from './AccountSettingsPage.messages';
+import RobboPhoneCountrySelect from './RobboPhoneCountrySelect';
+import { formatPhoneNumberForDisplay } from './data/utils/phoneValidation';
 
 import {
   openForm,
@@ -18,6 +23,14 @@ import {
 } from './data/actions';
 import { editableFieldSelector } from './data/selectors';
 import CertificatePreference from './certificate-preference/CertificatePreference';
+
+const PHONE_LABELS = { en, ru };
+
+function getPhoneInputLabels() {
+  const locale = getLocale();
+  const base = locale?.startsWith('ru') ? 'ru' : 'en';
+  return PHONE_LABELS[base] || en;
+}
 
 const EditableField = (props) => {
   const {
@@ -53,6 +66,10 @@ const EditableField = (props) => {
     onChange(name, e.target.value);
   };
 
+  const handlePhoneChange = (nextValue) => {
+    onChange(name, nextValue ?? '');
+  };
+
   const handleEdit = () => {
     onEdit(name);
   };
@@ -76,7 +93,9 @@ const EditableField = (props) => {
     if (!rawValue) {
       return null;
     }
-    let finalValue = rawValue;
+    let finalValue = name === 'phone_number'
+      ? formatPhoneNumberForDisplay(rawValue)
+      : rawValue;
 
     if (userSuppliedValue) {
       finalValue += `: ${userSuppliedValue}`;
@@ -95,6 +114,7 @@ const EditableField = (props) => {
   };
 
   const displayedValue = renderValue(value);
+  const isPhoneField = name === 'phone_number';
 
   return (
     <SwitchContent
@@ -108,15 +128,41 @@ const EditableField = (props) => {
                 isInvalid={error != null}
               >
                 <Form.Label size="sm" className="h6 d-block" htmlFor={id}>{label}</Form.Label>
-                <Form.Control
-                  data-hj-suppress
-                  name={name}
-                  id={id}
-                  type={type}
-                  value={value}
-                  onChange={handleChange}
-                  {...others}
-                />
+                {isPhoneField ? (
+                  <>
+                    <PhoneInput
+                      className="robbo-phone-input"
+                      value={value || undefined}
+                      onChange={handlePhoneChange}
+                      defaultCountry="RU"
+                      international
+                      labels={getPhoneInputLabels()}
+                      countrySelectComponent={RobboPhoneCountrySelect}
+                      countrySelectProps={{
+                        'aria-label': intl.formatMessage(
+                          messages['account.settings.field.phone.number.country.aria'],
+                        ),
+                      }}
+                      numberInputProps={{
+                        id,
+                        autoComplete: 'tel',
+                        inputMode: 'tel',
+                        'aria-invalid': error != null,
+                      }}
+                    />
+                    <input type="hidden" name={name} value={value || ''} />
+                  </>
+                ) : (
+                  <Form.Control
+                    data-hj-suppress
+                    name={name}
+                    id={id}
+                    type={type}
+                    value={value}
+                    onChange={handleChange}
+                    {...others}
+                  />
+                )}
                 {!!helpText && <Form.Text>{helpText}</Form.Text>}
                 {error != null && <Form.Control.Feedback hasIcon={false}>{error}</Form.Control.Feedback>}
                 {others.children}

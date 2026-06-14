@@ -1,7 +1,8 @@
 {
   "account.settings.field.phone.number": "Phone number",
   "account.settings.field.phone.number.empty": "Add phone number",
-  "account.settings.field.phone.number.invalid": "Enter a valid phone number: +7 and 10 digits for Russia, or international format with «+»",
+  "account.settings.field.phone.number.invalid": "Enter a valid phone number for the selected country",
+  "account.settings.field.phone.number.country.aria": "Country code",
   "account.page.title": "Account | {siteName}",
   "robbo.header.mainNav.myCourses": "My Courses",
   "robbo.header.mainNav.programs": "Programs",

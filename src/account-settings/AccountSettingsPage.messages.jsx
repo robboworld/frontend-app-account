@@ -233,8 +233,13 @@ const messages = defineMessages({
   },
   'account.settings.field.phone.number.invalid': {
     id: 'account.settings.field.phone.number.invalid',
-    defaultMessage: 'Enter a valid phone number: +7 and 10 digits for Russia, or international format with «+»',
+    defaultMessage: 'Enter a valid phone number for the selected country',
     description: 'Validation error for account settings phone number field.',
+  },
+  'account.settings.field.phone.number.country.aria': {
+    id: 'account.settings.field.phone.number.country.aria',
+    defaultMessage: 'Country code',
+    description: 'Accessible label for phone country code selector in account settings.',
   },
   'account.settings.field.secondary.email': {
     id: 'account.settings.field.secondary.email',
