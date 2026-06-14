@@ -9,6 +9,8 @@ import {
 import SwitchContent from './SwitchContent';
 import EmptyContent from './EmptyContent';
 import EditButton from './EditButton';
+import RobboSelect from './RobboSelect';
+import { flattenEditableSelectOptions } from './selectOptionsUtils';
 import messages from './AccountSettingsPage.messages';
 
 import {
@@ -104,30 +106,7 @@ const EditableSelectField = (props) => {
   };
 
   const displayedValue = renderValue(value);
-
-  const selectOptions = options.map((option) => {
-    if (option.group) {
-      // If the option has a 'group' property, it represents an element with sub-options.
-      return (
-        <optgroup label={option.label} key={option.label}>
-          {option.group.map((subOption) => (
-            <option
-              value={subOption.value}
-              key={`${subOption.value}-${subOption.label}`}
-              disabled={subOption?.disabled}
-            >
-              {subOption.label}
-            </option>
-          ))}
-        </optgroup>
-      );
-    }
-    return (
-      <option value={option.value} key={`${option.value}-${option.label}`} disabled={option?.disabled}>
-        {option.label}
-      </option>
-    );
-  });
+  const selectMenuItems = flattenEditableSelectOptions(options);
 
   return (
     <SwitchContent
@@ -141,18 +120,28 @@ const EditableSelectField = (props) => {
                 isInvalid={error != null}
               >
                 <Form.Label size="sm" className="h6 d-block" htmlFor={id}>{label}</Form.Label>
-                <Form.Control
-                  data-hj-suppress
-                  name={name}
-                  id={id}
-                  type={type}
-                  as={type}
-                  value={value}
-                  onChange={handleChange}
-                  {...others}
-                >
-                  {options.length > 0 && selectOptions}
-                </Form.Control>
+                {type === 'select' ? (
+                  <RobboSelect
+                    data-hj-suppress
+                    id={id}
+                    name={name}
+                    value={value}
+                    onChange={handleChange}
+                    menuItems={selectMenuItems}
+                    isInvalid={error != null}
+                  />
+                ) : (
+                  <Form.Control
+                    data-hj-suppress
+                    name={name}
+                    id={id}
+                    type={type}
+                    as={type}
+                    value={value}
+                    onChange={handleChange}
+                    {...others}
+                  />
+                )}
                 {!!helpText && <Form.Text>{helpText}</Form.Text>}
                 {error != null && <Form.Control.Feedback>{error}</Form.Control.Feedback>}
                 {others.children}
