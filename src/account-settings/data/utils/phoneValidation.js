@@ -14,36 +14,23 @@ export const RU_PHONE_PATTERN = /^\+7\d{10}$/;
 export const INTL_PHONE_PATTERN = /^\+(?!7)[1-9]\d{7,14}$/;
 
 export function sanitizePhoneInput(value) {
-  const raw = String(value ?? '');
-  const hasPlus = raw.trimStart().startsWith('+');
-  const digits = raw.replace(/\D/g, '');
-  return hasPlus ? `+${digits}` : digits;
+  const trimmed = String(value ?? '').trim();
+  if (!trimmed.startsWith('+')) {
+    return trimmed;
+  }
+  const digits = trimmed.replace(/\D/g, '');
+  return digits ? `+${digits}` : '';
 }
 
-/**
- * Normalize common Russian input (8…, 7…, 10 digits) to +7XXXXXXXXXX.
- */
+/** Strip formatting from E.164 value (PhoneInput always includes "+"). */
 export function normalizeRobboPhoneNumber(value) {
   const trimmed = String(value ?? '').trim();
-  if (!trimmed) {
+  if (!trimmed.startsWith('+')) {
     return '';
   }
-  const hasPlus = trimmed.startsWith('+');
   const digits = trimmed.replace(/\D/g, '');
   if (!digits) {
     return '';
-  }
-  if (hasPlus) {
-    return `+${digits}`;
-  }
-  if (digits.length === 11 && digits.startsWith('8')) {
-    return `+7${digits.slice(1)}`;
-  }
-  if (digits.length === 11 && digits.startsWith('7')) {
-    return `+${digits}`;
-  }
-  if (digits.length === 10) {
-    return `+7${digits}`;
   }
   return `+${digits}`;
 }
@@ -53,14 +40,22 @@ export function isValidPhoneNumber(value) {
   if (!normalized) {
     return true;
   }
-  try {
-    if (isValidLibPhoneNumber(normalized)) {
-      return true;
-    }
-  } catch {
-    // Fall through to regex fallback for pasted or legacy values.
+  if (normalized.startsWith('+7') && normalized.length !== 12) {
+    return false;
   }
-  return RU_PHONE_PATTERN.test(normalized) || INTL_PHONE_PATTERN.test(normalized);
+  if (RU_PHONE_PATTERN.test(normalized) || INTL_PHONE_PATTERN.test(normalized)) {
+    return true;
+  }
+  if (!normalized.startsWith('+7')) {
+    try {
+      if (isValidLibPhoneNumber(normalized)) {
+        return true;
+      }
+    } catch {
+      // Ignore parse errors for legacy pasted values.
+    }
+  }
+  return false;
 }
 
 /** Display E.164 value with country spacing (matches PhoneInput international format). */
