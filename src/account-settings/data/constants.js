@@ -32,7 +32,6 @@ export const GENDER_OPTIONS = [
   '',
   'f',
   'm',
-  'o',
 ];
 export const WORK_EXPERIENCE_OPTIONS = [
   '',
