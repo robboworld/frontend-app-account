@@ -118,6 +118,7 @@ initialize({
         MARKETING_EMAILS_OPT_IN: (process.env.MARKETING_EMAILS_OPT_IN || false),
         PASSWORD_RESET_SUPPORT_LINK: process.env.PASSWORD_RESET_SUPPORT_LINK,
         LEARNER_FEEDBACK_URL: process.env.LEARNER_FEEDBACK_URL,
+        LANGUAGE_PREFERENCE_COOKIE_NAME: process.env.LANGUAGE_PREFERENCE_COOKIE_NAME || 'openedx-language-preference',
       }, 'App loadConfig override handler');
     },
   },
