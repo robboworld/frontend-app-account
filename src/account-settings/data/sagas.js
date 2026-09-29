@@ -97,7 +97,8 @@ export function* handleSaveSettings(action) {
 
       yield put(savePreviousSiteLanguage(previousSiteLanguage));
 
-      publish(LOCALE_CHANGED, getLocale());
+      // Use saved language code: middleware may rewrite the cookie before getLocale() updates.
+      publish(LOCALE_CHANGED, commitValues);
       handleRtl();
       savedValues = commitData;
     } else {
