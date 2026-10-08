@@ -1,10 +1,10 @@
 import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { convertKeyNames, snakeCaseObject } from '@edx/frontend-platform/utils';
-import siteLanguageList from './constants';
+import { ROBBO_SITE_LANGUAGES } from './robboLanguages';
 
 export async function getSiteLanguageList() {
-  return siteLanguageList;
+  return ROBBO_SITE_LANGUAGES;
 }
 
 export async function patchPreferences(username, params) {

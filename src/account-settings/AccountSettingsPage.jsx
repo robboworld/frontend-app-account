@@ -55,6 +55,7 @@ import {
   FIELD_LABELS,
 } from './data/constants';
 import { fetchSiteLanguages } from './site-language';
+import { orderSiteLanguageOptions } from './site-language/robboLanguages';
 import { fetchCourseList } from '../notification-preferences/data/thunks';
 import NotificationSettings from '../notification-preferences/NotificationSettings';
 import { withLocation, withNavigate } from './hoc';
@@ -778,7 +779,7 @@ class AccountSettingsPage extends React.Component {
           <EditableSelectField
             name="siteLanguage"
             type="select"
-            options={this.props.siteLanguageOptions}
+            options={orderSiteLanguageOptions(this.props.siteLanguageOptions, this.context.locale)}
             value={this.props.siteLanguage.draft !== undefined ? this.props.siteLanguage.draft : this.context.locale}
             label={this.props.intl.formatMessage(messages['account.settings.field.site.language'])}
             helpText={this.props.intl.formatMessage(messages['account.settings.field.site.language.help.text'])}
