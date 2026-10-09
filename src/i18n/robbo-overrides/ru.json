@@ -13,5 +13,7 @@
   "robbo.header.user.signOut": "Выйти",
   "account.settings.section.linked.accounts": "Подключённые учётные записи",
   "account.settings.section.linked.accounts.description": "Вы можете связать свои учётные записи, чтобы упростить вход в {siteName}.",
-  "account.settings.sso.no.providers": "Сейчас нет доступных учётных записей для подключения."
+  "account.settings.sso.no.providers": "Сейчас нет доступных учётных записей для подключения.",
+  "robbo.header.studio.label": "Студия",
+  "robbo.header.studio.aria": "Перейти в Студию"
 }
