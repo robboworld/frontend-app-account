@@ -24,6 +24,11 @@ jest.mock('react-redux', () => ({
 }));
 
 jest.mock('@edx/frontend-platform/auth');
+// Robbo: the phone field picks country names by getLocale(); the app configures i18n before render, this test does not.
+jest.mock('@edx/frontend-platform/i18n', () => ({
+  ...jest.requireActual('@edx/frontend-platform/i18n'),
+  getLocale: jest.fn(() => 'en'),
+}));
 
 const IntlAccountSettingsPage = injectIntl(AccountSettingsPage);
 

@@ -28,7 +28,7 @@ exports[`EditableSelectField renders EditableSelectField correctly with editing 
           Main Label
         </h6>
         <button
-          className="ml-3 btn btn-link"
+          className="account-settings__edit-btn btn btn-link btn-sm"
           disabled={false}
           onClick={[Function]}
           type="button"
@@ -111,36 +111,7 @@ exports[`EditableSelectField renders EditableSelectField correctly with editing 
             onChange={[Function]}
             type="text"
             value="Test Field"
-          >
-            <option
-              value="defaultOption"
-            >
-              Default Option
-            </option>
-            <optgroup
-              label="User Options"
-            >
-              <option
-                value="suboption1"
-              >
-                Suboption 1
-              </option>
-            </optgroup>
-            <optgroup
-              label="Other Options"
-            >
-              <option
-                value="suboption2"
-              >
-                Suboption 2
-              </option>
-              <option
-                value="suboption3"
-              >
-                Suboption 3
-              </option>
-            </optgroup>
-          </text>
+          />
         </div>
         <div
           className="pgn__form-text pgn__form-text-default"
@@ -234,7 +205,7 @@ exports[`EditableSelectField renders EditableSelectField with an error 1`] = `
           Main Label
         </h6>
         <button
-          className="ml-3 btn btn-link"
+          className="account-settings__edit-btn btn btn-link btn-sm"
           disabled={false}
           onClick={[Function]}
           type="button"
@@ -303,7 +274,7 @@ exports[`EditableSelectField renders selectOptions when option does not have a g
           Main Label
         </h6>
         <button
-          className="ml-3 btn btn-link"
+          className="account-settings__edit-btn btn btn-link btn-sm"
           disabled={false}
           onClick={[Function]}
           type="button"
@@ -372,7 +343,7 @@ exports[`EditableSelectField renders selectOptions when option has a group 1`] =
           Main Label
         </h6>
         <button
-          className="ml-3 btn btn-link"
+          className="account-settings__edit-btn btn btn-link btn-sm"
           disabled={false}
           onClick={[Function]}
           type="button"
@@ -441,7 +412,7 @@ exports[`EditableSelectField renders selectOptions with multiple groups 1`] = `
           Main Label
         </h6>
         <button
-          className="ml-3 btn btn-link"
+          className="account-settings__edit-btn btn btn-link btn-sm"
           disabled={false}
           onClick={[Function]}
           type="button"
