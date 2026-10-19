@@ -2,7 +2,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import 'formdata-polyfill';
-import { AppProvider, ErrorPage } from '@edx/frontend-platform/react';
+import { AppProvider } from '@edx/frontend-platform/react';
 import {
   subscribe, initialize, APP_INIT_ERROR, APP_READY, mergeConfig, getConfig,
 } from '@edx/frontend-platform';
@@ -15,6 +15,9 @@ import configureStore from './data/configureStore';
 import AccountSettingsPage, { NotFoundPage } from './account-settings';
 import IdVerificationPageSlot from './plugin-slots/IdVerificationPageSlot';
 import messages from './i18n';
+import {
+  initRobboErrors, RobboErrorBoundary, RobboErrorPage, robboErrorsMiddleware,
+} from './robbo-errors';
 import { RobboFooter, RobboHeader } from './robbo-layout';
 
 import './index.scss';
@@ -66,43 +69,50 @@ const initYandexMetrika = () => {
   });
 };
 
+// Robbo: human-readable errors with a code and number (src/robbo-errors).
+initRobboErrors({ app: 'account' });
+
 const rootNode = createRoot(document.getElementById('root'));
 subscribe(APP_READY, () => {
   initYandexMetrika();
   rootNode.render(
     <StrictMode>
       <AppProvider store={configureStore()}>
-        <Head />
-        <Routes>
-          <Route element={(
-            <div className="robbo-layout-page">
-              <RobboHeader collapseNavIntoUserMenuOnNarrow />
-              <main className="flex-grow-1" id="main">
-                <Outlet />
-              </main>
-              <RobboFooter />
-            </div>
-        )}
-          >
-            <Route
-              path="/id-verification/*"
-              element={<IdVerificationPageSlot />}
-            />
-            <Route index element={<AccountSettingsPage />} />
-            <Route path="/notfound" element={<NotFoundPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-        </Routes>
+        <RobboErrorBoundary>
+          <Head />
+          <Routes>
+            <Route element={(
+              <div className="robbo-layout-page">
+                <RobboHeader collapseNavIntoUserMenuOnNarrow />
+                <main className="flex-grow-1" id="main">
+                  <Outlet />
+                </main>
+                <RobboFooter />
+              </div>
+          )}
+            >
+              <Route
+                path="/id-verification/*"
+                element={<IdVerificationPageSlot />}
+              />
+              <Route index element={<AccountSettingsPage />} />
+              <Route path="/notfound" element={<NotFoundPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </RobboErrorBoundary>
       </AppProvider>
     </StrictMode>,
   );
 });
 
-subscribe(APP_INIT_ERROR, (error) => {
-  rootNode.render(<ErrorPage message={error.message} />);
+// PubSub calls back with (topic, data): the error is the second argument.
+subscribe(APP_INIT_ERROR, (message, error) => {
+  rootNode.render(<RobboErrorPage error={error} startup />);
 });
 
 initialize({
+  authMiddleware: [robboErrorsMiddleware],
   messages,
   requireAuthenticatedUser: true,
   hydrateAuthenticatedUser: true,
