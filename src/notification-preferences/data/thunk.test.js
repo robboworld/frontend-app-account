@@ -2,7 +2,7 @@ import { updatePreferenceToggle } from './thunks';
 import {
   updatePreferenceValue,
   fetchNotificationPreferenceSuccess,
-  fetchNotificationPreferenceFailed,
+  updatePreferenceFailed,
 } from './actions';
 import { patchPreferenceToggle, postPreferenceToggle } from './service';
 import { EMAIL } from './constants';
@@ -16,6 +16,7 @@ jest.mock('./actions', () => ({
   updatePreferenceValue: jest.fn(),
   fetchNotificationPreferenceSuccess: jest.fn(),
   fetchNotificationPreferenceFailed: jest.fn(),
+  updatePreferenceFailed: jest.fn(),
 }));
 
 describe('updatePreferenceToggle', () => {
@@ -128,7 +129,8 @@ describe('updatePreferenceToggle', () => {
     expect(dispatch).toHaveBeenCalledWith(fetchNotificationPreferenceSuccess(courseId, { data: mockData }, false));
   });
 
-  it('should dispatch fetchNotificationPreferenceFailed on error', async () => {
+  // Robbo: a failed change keeps the list and says what failed, with the code (src/robbo-errors).
+  it('should dispatch updatePreferenceFailed with the failure on error', async () => {
     patchPreferenceToggle.mockRejectedValue(new Error('Network Error'));
     await updatePreferenceToggle(
       courseId,
@@ -145,6 +147,6 @@ describe('updatePreferenceToggle', () => {
       notificationChannel,
       !value,
     ));
-    expect(dispatch).toHaveBeenCalledWith(fetchNotificationPreferenceFailed());
+    expect(updatePreferenceFailed).toHaveBeenCalledWith(expect.objectContaining({ code: expect.any(String) }));
   });
 });

@@ -106,6 +106,23 @@ describe('notification-preferences reducer', () => {
     });
   });
 
+  // Robbo: a failed change keeps the list and stores what failed (src/robbo-errors) for the notice.
+  it('keeps the preferences and stores the failure when a change fails', () => {
+    state = reducer(
+      state,
+      { type: Actions.FETCHED_PREFERENCES, payload: preferenceData },
+    );
+    const robboError = { code: 'SRV-ERROR', shortId: '7F3A-29C1', message: 'error text' };
+    const result = reducer(state, { type: Actions.FAILED_UPDATE_PREFERENCE, robboError });
+    expect(result.preferences.preferences).toEqual(preferenceData.preferences);
+    expect(result.preferences.updatePreferenceStatus).toEqual(FAILURE_STATUS);
+    expect(result.preferences.updateError).toEqual(robboError);
+    const next = reducer(result, {
+      type: Actions.UPDATE_PREFERENCE, preferenceName: 'newPost', notificationChannel: 'web', value: true,
+    });
+    expect(next.preferences.updateError).toBeNull();
+  });
+
   it('app preference changes when action is dispatched', () => {
     state = reducer(
       state,
