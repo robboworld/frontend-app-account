@@ -8,6 +8,7 @@ export const Actions = {
   UPDATE_SELECTED_COURSE: 'updateSelectedCourse',
   UPDATE_PREFERENCE: 'updatePreference',
   UPDATE_APP_PREFERENCE: 'updateAppValue',
+  FAILED_UPDATE_PREFERENCE: 'failedUpdatePreference',
 };
 
 export const fetchNotificationPreferenceSuccess = (courseId, payload, isAccountPreference) => dispatch => (
@@ -22,6 +23,12 @@ export const fetchNotificationPreferenceFetching = () => dispatch => (
 
 export const fetchNotificationPreferenceFailed = () => dispatch => (
   dispatch({ type: Actions.FAILED_PREFERENCES })
+);
+
+// Robbo: a preference that could not be saved: what failed, with the code and number (src/robbo-errors).
+// The list of preferences stays; FAILED_PREFERENCES used to wipe it, and the settings silently disappeared.
+export const updatePreferenceFailed = robboError => dispatch => (
+  dispatch({ type: Actions.FAILED_UPDATE_PREFERENCE, robboError })
 );
 
 export const fetchCourseListSuccess = payload => dispatch => (

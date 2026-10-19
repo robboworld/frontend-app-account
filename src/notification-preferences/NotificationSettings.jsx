@@ -4,17 +4,19 @@ import { useSelector } from 'react-redux';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Container, Hyperlink } from '@openedx/paragon';
 
-import { selectSelectedCourseId, selectShowPreferences } from './data/selectors';
+import { selectSelectedCourseId, selectShowPreferences, selectUpdatePreferenceError } from './data/selectors';
 import messages from './messages';
 import NotificationCoursesDropdown from './NotificationCoursesDropdown';
 import NotificationPreferences from './NotificationPreferences';
 import { useFeedbackWrapper } from '../hooks';
+import { RobboErrorNotice } from '../robbo-errors';
 
 const NotificationSettings = () => {
   useFeedbackWrapper();
   const intl = useIntl();
   const showPreferences = useSelector(selectShowPreferences());
   const courseId = useSelector(selectSelectedCourseId());
+  const updateError = useSelector(selectUpdatePreferenceError());
 
   return (
     showPreferences && (
@@ -43,6 +45,8 @@ const NotificationSettings = () => {
           </Hyperlink>
         </div>
         <NotificationCoursesDropdown />
+        {/* Robbo: a preference that could not be saved — what failed and the code (src/robbo-errors). */}
+        {updateError && <RobboErrorNotice info={updateError} className="mb-3" />}
         <NotificationPreferences courseId={courseId} />
         <div className="border border-light-700 my-6" />
       </Container>

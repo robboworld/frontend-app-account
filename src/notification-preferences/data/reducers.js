@@ -101,6 +101,7 @@ const notificationPreferencesReducer = (state = defaultState, action = {}) => {
         preferences: {
           ...state.preferences,
           selectedCourse: courseId,
+          updateError: null,
         },
       };
     case Actions.UPDATE_PREFERENCE:
@@ -114,6 +115,7 @@ const notificationPreferencesReducer = (state = defaultState, action = {}) => {
               : preference
           )),
           updatePreferenceStatus: LOADING_STATUS,
+          updateError: null,
         },
       };
     case Actions.UPDATE_APP_PREFERENCE:
@@ -127,6 +129,17 @@ const notificationPreferencesReducer = (state = defaultState, action = {}) => {
               : app
           )),
           updatePreferenceStatus: LOADING_STATUS,
+          updateError: null,
+        },
+      };
+    case Actions.FAILED_UPDATE_PREFERENCE:
+      // Robbo: what failed (src/robbo-errors), shown above the preferences; the list itself stays.
+      return {
+        ...state,
+        preferences: {
+          ...state.preferences,
+          updatePreferenceStatus: FAILURE_STATUS,
+          updateError: action.robboError,
         },
       };
     default:

@@ -6,6 +6,11 @@ export const selectUpdatePreferencesStatus = () => state => (
   state.notificationPreferences.preferences.updatePreferenceStatus
 );
 
+// Robbo: the failure of the last preference change (src/robbo-errors), or null.
+export const selectUpdatePreferenceError = () => state => (
+  state.notificationPreferences.preferences.updateError || null
+);
+
 export const selectPreferences = () => state => (
   state.notificationPreferences.preferences?.preferences
 );

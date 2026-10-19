@@ -8,6 +8,7 @@ import {
   fetchNotificationPreferenceFailed,
   fetchNotificationPreferenceFetching,
   fetchNotificationPreferenceSuccess,
+  updatePreferenceFailed,
   updatePreferenceValue,
   updateSelectedCourse,
 } from './actions';
@@ -17,6 +18,7 @@ import {
   patchPreferenceToggle,
   postPreferenceToggle,
 } from './service';
+import { describeError } from '../../robbo-errors';
 
 const normalizeCourses = (responseData) => {
   const courseList = responseData.results?.map((enrollment) => ({
@@ -200,7 +202,7 @@ export const updatePreferenceToggle = (
         notificationChannel,
         !value,
       ));
-      dispatch(fetchNotificationPreferenceFailed());
+      dispatch(updatePreferenceFailed(describeError(errors)));
     }
   }
 );
