@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import renderer from 'react-test-renderer';
+import { fireEvent, render, screen } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
 
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
@@ -165,5 +166,28 @@ describe('EditableSelectField', () => {
     };
     const tree = renderer.create(reduxWrapper(<IntlEditableSelectField {...propsWithGroups} />)).toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  // Robbo: type="select" is RobboSelect, not a native select — the value goes to the form in a hidden input,
+  // options and their groups are in the menu.
+  it('renders RobboSelect with option groups for type select', () => {
+    // jsdom has no scrollIntoView; RobboSelect scrolls the highlighted option into view on open.
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    const { container } = render(reduxWrapper(
+      <IntlEditableSelectField {...props} type="select" value="suboption2" isEditing />,
+    ));
+
+    expect(container.querySelector('input[type="hidden"][name="testField"]')).toHaveValue('suboption2');
+    const trigger = container.querySelector('#field-testField');
+    expect(trigger).toHaveTextContent('Suboption 2');
+
+    fireEvent.click(trigger);
+    expect(screen.getByText('User Options')).toBeInTheDocument();
+    expect(screen.getByText('Other Options')).toBeInTheDocument();
+    const options = screen.getAllByRole('option');
+    expect(options.map(option => option.textContent)).toEqual(
+      ['Default Option', 'Suboption 1', 'Suboption 2', 'Suboption 3'],
+    );
+    expect(options[2]).toHaveAttribute('aria-selected', 'true');
   });
 });
