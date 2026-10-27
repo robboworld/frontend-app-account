@@ -12,6 +12,7 @@ $fa-font-path: "~font-awesome/fonts";
 @import './sass/robbo-select';
 @import "~react-phone-number-input/style.css";
 @import "./account-settings/style";
+@import "./notifications-feed/notifications-feed";
 @import "./id-verification/id-verification";
 
 .word-break-all {
@@ -51,6 +52,90 @@ $fa-font-path: "~font-awesome/fonts";
     $robbo-brand-primary-dark,
     $robbo-brand-primary-darker
   );
+}
+
+// Robbo: progress of bulk actions in the notification settings (notification-preferences/ActionProgress.jsx).
+// Top level: the confirmation dialogs render in #paragon-portal-root, outside the settings.
+.notification-busy {
+  display: inline-flex;
+  align-items: center;
+  gap: $robbo-account-space-sm;
+}
+
+.notification-busy__spinner {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+.notification-progress {
+  display: flex;
+  flex-direction: column;
+  gap: $robbo-account-space-sm;
+}
+
+.notification-progress__label {
+  margin: 0;
+  color: $robbo-account-text-primary;
+}
+
+.notification-progress__track {
+  position: relative;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #eef0f2;
+  overflow: hidden;
+}
+
+.notification-progress__bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--progress, 0%);
+  border-radius: inherit;
+  background: $robbo-brand-primary;
+  transition: width 0.3s ease;
+}
+
+// Unknown length: a stripe runs along the track.
+.notification-progress__track--running .notification-progress__bar {
+  width: 40%;
+  animation: robbo-notification-progress 1.2s ease-in-out infinite;
+}
+
+// Known length, still working: a light glint runs over the whole track.
+.notification-progress__track--working::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 30%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
+  animation: robbo-notification-progress 1.4s ease-in-out infinite;
+}
+
+.notification-progress__track--working {
+  background: mix(#ffffff, $robbo-brand-primary, 85%);
+}
+
+@keyframes robbo-notification-progress {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notification-progress__bar {
+    transition: none;
+  }
+
+  .notification-progress__track--running .notification-progress__bar {
+    width: 100%;
+    animation: none;
+    opacity: 0.6;
+  }
+
+  .notification-progress__track--working::after {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 .checkboxOption {
@@ -132,8 +217,6 @@ $fa-font-path: "~font-awesome/fonts";
     width: 250px !important;
   }
 
-  .dropdown-item:active,
-  .dropdown-item:focus,
   .btn-tertiary:not(:disabled):not(.disabled).active {
     background-color: $light-300 !important;
   }
@@ -147,18 +230,739 @@ $fa-font-path: "~font-awesome/fonts";
     height: 36px;
   }
 
-  .course-dropdown{
-    #course-dropdown-btn {
-      width: 100%;
-      font-size: 14px !important;
-      padding-top: 10px !important;
-      padding-bottom: 10px !important;
-      border: 1px solid $light-500 !important;
+  // Robbo: scope rows (NotificationScopes) — «Для всех курсов» and each course, one open at a time.
+  .notification-scopes__list {
+    display: flex;
+    flex-direction: column;
+    gap: $robbo-account-space-sm;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .notification-scope {
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: $robbo-account-field-radius;
+    background: #fff;
+
+    &--open {
+      border-color: rgba($robbo-account-accent-green, 0.45);
+    }
+  }
+
+  .notification-scope__head {
+    display: flex;
+    align-items: center;
+    gap: $robbo-account-space-md;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: $robbo-account-space-md $robbo-account-space-lg;
+    border: 0;
+    border-radius: $robbo-account-field-radius;
+    background: transparent;
+    color: $robbo-account-text-primary;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background: $robbo-ui-primary-light;
     }
 
-    .dropdown-item {
-      font-size: 14px !important;
+    &:focus-visible {
+      outline: 2px solid rgba($robbo-account-accent-green, 0.45);
+      outline-offset: 2px;
     }
+  }
+
+  .notification-scope--open > .notification-scope__head {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .notification-scope__title {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .notification-scope__name {
+    font-size: $robbo-account-field-title-size;
+    font-weight: 600;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .notification-scope__hint,
+  .notification-scope__status {
+    font-size: $robbo-account-helper-size;
+    line-height: 1.4;
+    color: $robbo-account-text-secondary;
+  }
+
+  .notification-scope__status {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .notification-scope__chevron {
+    flex-shrink: 0;
+    color: $robbo-account-accent-green;
+  }
+
+  .notification-scope__body {
+    padding: $robbo-account-space-md $robbo-account-space-lg $robbo-account-space-sm;
+    border-top: 1px solid $robbo-account-field-border-color;
+  }
+
+  .notification-scope__reset {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $robbo-account-space-sm $robbo-account-space-lg;
+    margin-bottom: $robbo-account-space-lg;
+    padding: $robbo-account-space-sm $robbo-account-space-md;
+    border-radius: 0.5rem;
+    background: $robbo-ui-primary-light;
+    font-size: $robbo-account-helper-size;
+    color: $robbo-account-text-primary;
+
+    .btn-outline-primary {
+      min-height: 2.5rem;
+      background: #fff;
+    }
+  }
+
+  .notification-scopes__courses-head {
+    margin: $robbo-account-space-xl 0 $robbo-account-space-sm;
+  }
+
+  .notification-scopes__courses-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $robbo-account-space-sm $robbo-account-space-md;
+    margin-bottom: $robbo-account-space-xs;
+
+    .notification-scopes__heading {
+      margin-bottom: 0;
+    }
+
+    .btn-outline-primary {
+      min-height: 2.5rem;
+    }
+  }
+
+  .notification-scopes__heading {
+    margin-bottom: $robbo-account-space-xs;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 700;
+    color: $robbo-account-text-primary;
+  }
+
+  .notification-scopes__courses-hint,
+  .notification-scopes__empty {
+    margin-bottom: 0;
+    font-size: $robbo-account-helper-size;
+    line-height: 1.45;
+    color: $robbo-account-text-secondary;
+  }
+
+  .notification-scopes__empty {
+    padding: $robbo-account-space-md 0;
+  }
+
+  .notification-scopes__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $robbo-account-space-sm $robbo-account-space-md;
+    margin-bottom: $robbo-account-space-sm;
+
+    .notification-scopes__search {
+      flex: 1 1 16rem;
+      margin-bottom: 0;
+    }
+  }
+
+  .notification-scopes__sort {
+    display: inline-flex;
+    flex: 0 1 auto;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    margin: 0;
+    font-size: $robbo-account-helper-size;
+    color: $robbo-account-text-secondary;
+
+    select {
+      min-height: 2.75rem;
+      max-width: 100%;
+      padding: 0 $robbo-account-space-md;
+      border: 1px solid $robbo-account-field-border-color;
+      border-radius: $robbo-account-field-radius;
+      background: #fff;
+      color: $robbo-account-text-primary;
+      font-size: 14px;
+
+      &:focus {
+        border-color: $robbo-account-accent-green;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba($robbo-account-accent-green, 0.25);
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      width: 100%;
+
+      select {
+        flex: 1;
+      }
+    }
+  }
+
+  .notification-scopes__search {
+    display: flex;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    margin-bottom: $robbo-account-space-sm;
+    padding: 0 $robbo-account-space-md;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: $robbo-account-field-radius;
+    background: #fff;
+    color: $robbo-account-text-secondary;
+
+    &:focus-within {
+      border-color: $robbo-account-accent-green;
+      box-shadow: 0 0 0 0.2rem rgba($robbo-account-accent-green, 0.25);
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      min-height: 2.75rem;
+      border: 0;
+      background: transparent;
+      color: $robbo-account-text-primary;
+      font-size: 14px;
+      outline: none;
+    }
+  }
+
+  // Robbo: ScopeEditor — a type per row, delivery mode as a segmented radio group.
+  .notification-editor__loading {
+    display: flex;
+    justify-content: center;
+    padding: $robbo-account-space-xl 0;
+  }
+
+  .notification-editor__app {
+    + .notification-editor__app {
+      margin-top: $robbo-account-space-lg;
+    }
+
+    &--team {
+      padding: $robbo-account-space-md;
+      border: 1px dashed rgba($robbo-account-accent-green, 0.6);
+      border-radius: $robbo-account-field-radius;
+      background: $robbo-ui-primary-light;
+    }
+  }
+
+  .notification-editor__app-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    margin-bottom: $robbo-account-space-sm;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 700;
+    color: $robbo-account-text-primary;
+  }
+
+  .notification-editor__types {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  // Name and options share the first row and are centred on each other; «Письма: …» takes a row of
+  // its own under the options, so showing it does not move the name. Phones stack everything.
+  .notification-editor__type {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: $robbo-account-space-xs $robbo-account-space-lg;
+    padding: $robbo-account-space-sm 0;
+
+    + .notification-editor__type {
+      border-top: 1px solid $robbo-account-field-border-color;
+    }
+
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: $robbo-account-space-sm;
+    }
+  }
+
+  .notification-editor__type-name {
+    grid-row: 1;
+    grid-column: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $robbo-account-space-xs $robbo-account-space-sm;
+    min-width: 0;
+    font-size: $robbo-account-field-value-size;
+    color: $robbo-account-text-primary;
+    overflow-wrap: anywhere;
+  }
+
+  .notification-editor__info {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $robbo-account-text-secondary;
+
+    &:hover,
+    &:focus-visible {
+      color: $robbo-account-accent-green;
+    }
+  }
+
+  // The options and «Письма» are placed in the row's grid directly.
+  .notification-editor__controls {
+    display: contents;
+
+    > .notification-mode {
+      grid-row: 1;
+      grid-column: 2;
+      justify-self: end;
+    }
+
+    > .notification-editor__cadence {
+      grid-row: 2;
+      grid-column: 2;
+      justify-self: end;
+    }
+
+    @include media-breakpoint-down(sm) {
+      > .notification-mode {
+        grid-row: 2;
+        grid-column: 1;
+        justify-self: stretch;
+      }
+
+      > .notification-editor__cadence {
+        grid-row: 3;
+        grid-column: 1;
+        justify-self: start;
+      }
+    }
+  }
+
+  // Segmented control: a grey track, every option its own pill, the picked one a light green pill
+  // inside the track (nothing is clipped by the track's rounded edge).
+  .notification-mode {
+    position: relative;
+    display: inline-flex;
+    gap: 2px;
+    max-width: 100%;
+    padding: 3px;
+    border-radius: 999px;
+    background: #eef0f2;
+    isolation: isolate;
+
+    @include media-breakpoint-down(sm) {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  // The light green pill under the picked option; ScopeEditor sets its geometry and it slides.
+  .notification-mode__thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: var(--thumb-w);
+    height: var(--thumb-h);
+    border: 1px solid rgba($robbo-brand-primary, 0.6);
+    border-radius: 999px;
+    background: mix(#ffffff, $robbo-brand-primary, 82%);
+    box-shadow: 0 1px 2px rgba(17, 24, 39, 0.08);
+    transform: translate(var(--thumb-x), var(--thumb-y));
+    pointer-events: none;
+
+    &--animated {
+      transition:
+        transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+        width 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+        height 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  // A copy of the labels in the picked colour over the real ones, clipped to the thumb's shape and
+  // moving with it (same timing), so the colour travels with the thumb.
+  .notification-mode__highlight {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: inherit;
+    grid-template-columns: inherit;
+    gap: inherit;
+    padding: inherit;
+    clip-path: inset(
+      var(--thumb-y)
+      calc(100% - var(--thumb-x) - var(--thumb-w))
+      calc(100% - var(--thumb-y) - var(--thumb-h))
+      var(--thumb-x)
+      round 999px
+    );
+    pointer-events: none;
+
+    &--animated {
+      transition: clip-path 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+
+    .notification-mode__option--copy,
+    .notification-mode__option--copy:hover {
+      background: transparent;
+      color: $robbo-brand-primary-darker;
+    }
+  }
+
+  .notification-mode__option {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: $robbo-account-text-primary;
+    font-size: 14px;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    // One weight for every option (Regular; the brand fonts have no semibold): no width jump on pick.
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    // Keyboard focus only: a mouse pick must not ring the target before the thumb arrives.
+    &:has(input:focus-visible) {
+      outline: 2px solid rgba($robbo-account-accent-green, 0.45);
+      outline-offset: 1px;
+    }
+
+    @supports not selector(:has(*)) {
+      &:focus-within {
+        outline: 2px solid rgba($robbo-account-accent-green, 0.45);
+        outline-offset: 1px;
+      }
+    }
+
+    // The thumb shows the pick; its colour comes from .notification-mode__highlight, which slides with
+    // the thumb (same weight everywhere: no width jump).
+    &--active,
+    &--active:hover {
+      background: transparent;
+    }
+
+    &--disabled {
+      color: $robbo-account-text-secondary;
+      cursor: not-allowed;
+      opacity: 0.55;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      padding: 0.5rem 0.25rem;
+      font-size: 13px;
+      white-space: normal;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .notification-editor__cadence {
+    display: inline-flex;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    margin: 0;
+    font-size: $robbo-account-helper-size;
+    color: $robbo-account-text-secondary;
+
+    select {
+      min-height: 2rem;
+      padding: 0 $robbo-account-space-sm;
+      border: 1px solid $robbo-account-field-border-color;
+      border-radius: 0.5rem;
+      background: #fff;
+      color: $robbo-account-text-primary;
+      font-size: 14px;
+
+      &:focus {
+        border-color: $robbo-account-accent-green;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba($robbo-account-accent-green, 0.25);
+      }
+    }
+  }
+
+  .notification-team-chip {
+    padding: 0.0625rem 0.5rem;
+    border-radius: 999px;
+    background: $robbo-account-accent-green;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .notification-scope__team {
+    margin-left: $robbo-account-space-sm;
+    vertical-align: 0.0625rem;
+  }
+
+  .notification-scopes__none {
+    padding: $robbo-account-space-md 0;
+    text-align: center;
+  }
+
+  .notification-scopes__none-title {
+    margin-bottom: $robbo-account-space-xs;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 700;
+    color: $robbo-account-text-primary;
+  }
+
+  // Robbo: «Отключить все уведомления», above the settings card.
+  .notification-disable-all {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $robbo-account-space-sm $robbo-account-space-md;
+    margin-bottom: $robbo-account-space-lg;
+
+    .btn-outline-primary {
+      min-height: 2.75rem;
+    }
+  }
+
+  .notification-disable-all__status {
+    font-size: $robbo-account-helper-size;
+    color: $robbo-account-text-secondary;
+  }
+
+  // Robbo: LearnerFollow — which learners a course-team member hears about.
+  .notification-learners {
+    margin: 0 0 $robbo-account-space-lg;
+    padding: $robbo-account-space-md $robbo-account-space-lg;
+    border: 1px dashed rgba($robbo-account-accent-green, 0.6);
+    border-radius: $robbo-account-field-radius;
+    background: $robbo-ui-primary-light;
+    min-width: 0;
+  }
+
+  .notification-learners__title {
+    float: none;
+    width: auto;
+    margin: 0 0 $robbo-account-space-xs;
+    padding: 0;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 700;
+    color: $robbo-account-text-primary;
+  }
+
+  .notification-learners__hint,
+  .notification-learners__warning {
+    margin: 0 0 $robbo-account-space-sm;
+    font-size: $robbo-account-helper-size;
+    line-height: 1.45;
+    color: $robbo-account-text-secondary;
+  }
+
+  .notification-learners__warning {
+    color: $robbo-account-text-primary;
+    font-weight: 600;
+  }
+
+  .notification-learners__modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $robbo-account-space-xs $robbo-account-space-xl;
+    margin-bottom: $robbo-account-space-sm;
+
+    label {
+      display: inline-flex;
+      align-items: center;
+      gap: $robbo-account-space-sm;
+      min-height: 2.25rem;
+      margin: 0;
+      font-size: 14px;
+      color: $robbo-account-text-primary;
+      cursor: pointer;
+    }
+
+    input {
+      accent-color: $robbo-brand-primary;
+    }
+  }
+
+  .notification-learners__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $robbo-account-space-xs;
+    margin: 0 0 $robbo-account-space-sm;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 2px 4px 2px 10px;
+      border: 1px solid rgba($robbo-brand-primary, 0.6);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 13px;
+      color: $robbo-account-text-primary;
+    }
+
+    button {
+      display: inline-flex;
+      padding: 2px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: $robbo-account-text-secondary;
+
+      &:hover,
+      &:focus-visible {
+        color: $robbo-account-text-primary;
+        background: $robbo-ui-primary-light;
+      }
+
+      .pgn__icon {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }
+
+  .notification-learners__search {
+    display: flex;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    margin-bottom: $robbo-account-space-xs;
+    padding: 0 $robbo-account-space-md;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: $robbo-account-field-radius;
+    background: #fff;
+    color: $robbo-account-text-secondary;
+
+    &:focus-within {
+      border-color: $robbo-account-accent-green;
+      box-shadow: 0 0 0 0.2rem rgba($robbo-account-accent-green, 0.25);
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      min-height: 2.5rem;
+      border: 0;
+      background: transparent;
+      color: $robbo-account-text-primary;
+      font-size: 14px;
+      outline: none;
+    }
+  }
+
+  .notification-learners__list {
+    max-height: 16rem;
+    margin: 0 0 $robbo-account-space-xs;
+    padding: $robbo-account-space-xs 0;
+    overflow-y: auto;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: $robbo-account-field-radius;
+    background: #fff;
+    list-style: none;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: $robbo-account-space-sm;
+      min-height: 2.5rem;
+      margin: 0;
+      padding: 0 $robbo-account-space-md;
+      font-size: 14px;
+      color: $robbo-account-text-primary;
+      cursor: pointer;
+
+      &:hover {
+        background: $robbo-ui-primary-light;
+      }
+    }
+
+    input {
+      accent-color: $robbo-brand-primary;
+    }
+  }
+
+  .notification-learners__name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .notification-learners__login,
+  .notification-learners__empty {
+    font-size: $robbo-account-helper-size;
+    color: $robbo-account-text-secondary;
+  }
+
+  .notification-learners__empty {
+    padding: $robbo-account-space-sm $robbo-account-space-md;
+  }
+
+  // A course whose settings differ from the account-wide ones.
+  .notification-course-badge {
+    flex-shrink: 0;
+    padding: 0.125rem 0.5rem;
+    border: 1px solid $robbo-account-accent-green;
+    border-radius: 999px;
+    background: #fff;
+    color: $robbo-account-accent-green;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
   }
 }
 
