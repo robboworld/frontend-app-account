@@ -1,0 +1,312 @@
+// Copyright (C) 2026 Robbo <https://robbo.ru>
+// SPDX-License-Identifier: AGPL-3.0-only
+// Part of the Robbo Open edX MFE overrides. See NOTICE at repository root.
+//
+// /account/notifications. Uses the account page tokens ($robbo-account-*, account-settings/_style.scss):
+// same content width, card look and accent green.
+
+$robbo-notifications-icon-size: 2.5rem;
+$robbo-notifications-dot-size: 0.625rem;
+
+.robbo-notifications {
+  width: 100%;
+  max-width: $robbo-account-content-max-width;
+  margin: 0 auto;
+  padding: $robbo-account-header-gap 20px 2.5rem;
+  box-sizing: border-box;
+  color: $robbo-account-text-primary;
+
+  @include media-breakpoint-up(lg) {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: $robbo-account-space-md $robbo-account-space-xl;
+    margin-bottom: $robbo-account-space-xl;
+  }
+
+  &__heading {
+    flex: 1 1 20rem;
+    min-width: 0;
+  }
+
+  &__title {
+    margin-bottom: $robbo-account-space-xs;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__description {
+    margin-bottom: 0;
+    font-size: $robbo-account-helper-size;
+    line-height: 1.45;
+    color: $robbo-account-text-secondary;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $robbo-account-space-sm $robbo-account-space-lg;
+
+    .btn-outline-primary {
+      @include robbo-account-btn-outline-primary;
+      min-height: 2.75rem;
+    }
+  }
+
+  &__settings-link {
+    @include robbo-account-text-link;
+    display: inline-flex;
+    align-items: center;
+    gap: $robbo-account-space-xs;
+    min-height: 2.75rem;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $robbo-account-space-sm;
+    margin-bottom: $robbo-account-space-xl;
+  }
+
+  &__filter {
+    display: inline-flex;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    min-height: 2.75rem;
+    padding: $robbo-account-space-sm $robbo-account-space-lg;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: 999px;
+    background: #fff;
+    color: $robbo-account-text-primary;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $robbo-account-accent-green;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba($robbo-account-accent-green, 0.35);
+      outline-offset: 2px;
+    }
+
+    &[aria-pressed="true"] {
+      background: $robbo-account-accent-green-subtle-bg;
+      border-color: $robbo-account-accent-green;
+      color: $robbo-account-accent-green;
+    }
+  }
+
+  &__badge {
+    min-width: 1.5rem;
+    padding: 0.125rem 0.4375rem;
+    border-radius: 999px;
+    background: $robbo-account-accent-green;
+    color: #fff;
+    font-size: $robbo-account-helper-size;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  &__group + &__group {
+    margin-top: $robbo-account-space-xl;
+  }
+
+  &__day {
+    margin-bottom: $robbo-account-space-sm;
+    font-size: $robbo-account-helper-size;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: $robbo-account-text-secondary;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $robbo-account-space-sm;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: $robbo-account-space-md;
+    padding: $robbo-account-field-padding-mobile;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: $robbo-account-field-radius;
+    background: $robbo-account-field-bg;
+    color: inherit;
+    text-decoration: none;
+
+    @include media-breakpoint-up(lg) {
+      padding: $robbo-account-field-padding;
+    }
+
+    &--unread {
+      background: #fff;
+      border-color: rgba($robbo-account-accent-green, 0.45);
+    }
+  }
+
+  a#{&}__item {
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+      border-color: $robbo-account-accent-green;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba($robbo-account-accent-green, 0.35);
+      outline-offset: 2px;
+    }
+  }
+
+  &__icon {
+    flex: 0 0 $robbo-notifications-icon-size;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $robbo-notifications-icon-size;
+    height: $robbo-notifications-icon-size;
+    border-radius: 50%;
+    background: $robbo-account-accent-green-subtle-bg;
+    color: $robbo-account-accent-green;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $robbo-account-space-xs;
+  }
+
+  &__type {
+    font-size: $robbo-account-helper-size;
+    font-weight: 600;
+    color: $robbo-account-accent-green;
+  }
+
+  &__text {
+    font-size: $robbo-account-field-value-size;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 $robbo-account-space-md;
+    font-size: $robbo-account-helper-size;
+    line-height: 1.45;
+    color: $robbo-account-text-secondary;
+  }
+
+  &__course {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  &__dot {
+    flex: 0 0 $robbo-notifications-dot-size;
+    width: $robbo-notifications-dot-size;
+    height: $robbo-notifications-dot-size;
+    margin-top: $robbo-account-space-sm;
+    border-radius: 50%;
+    background: $robbo-account-accent-green;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    padding: 2.5rem $robbo-account-space-xl;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: $robbo-account-field-radius;
+    background: $robbo-account-field-bg;
+    text-align: center;
+  }
+
+  &__empty-icon {
+    width: 3rem;
+    height: 3rem;
+    color: $robbo-account-accent-green;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__empty-title {
+    margin-bottom: 0;
+    font-size: $robbo-account-section-title-size;
+    font-weight: 700;
+  }
+
+  &__empty-body {
+    max-width: 32rem;
+    margin-bottom: 0;
+    font-size: $robbo-account-field-title-size;
+    color: $robbo-account-text-secondary;
+  }
+
+  &__loading,
+  &__more {
+    display: flex;
+    justify-content: center;
+    margin-top: $robbo-account-space-xl;
+  }
+
+  &__more .btn-outline-primary {
+    @include robbo-account-btn-outline-primary;
+    min-height: 2.75rem;
+  }
+}
+
+// Link to the page from the settings section (/account/#notifications).
+.notification-preferences__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $robbo-account-space-sm $robbo-account-space-lg;
+  margin-bottom: $robbo-account-space-sm;
+
+  .notification-heading {
+    margin-bottom: 0 !important;
+  }
+
+  @include media-breakpoint-down(lg) {
+    justify-content: center;
+  }
+}
+
+.notification-preferences__feed-link {
+  @include robbo-account-btn-outline-primary;
+  display: inline-flex;
+  align-items: center;
+  gap: $robbo-account-space-sm;
+  min-height: 2.75rem;
+}

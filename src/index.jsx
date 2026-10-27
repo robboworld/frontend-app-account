@@ -14,6 +14,7 @@ import { Route, Routes, Outlet } from 'react-router-dom';
 import configureStore from './data/configureStore';
 import AccountSettingsPage, { NotFoundPage } from './account-settings';
 import IdVerificationPageSlot from './plugin-slots/IdVerificationPageSlot';
+import { NotificationsPage } from './notifications-feed';
 import messages from './i18n';
 import {
   initRobboErrors, RobboErrorBoundary, RobboErrorPage, robboErrorsMiddleware,
@@ -96,6 +97,7 @@ subscribe(APP_READY, () => {
                 element={<IdVerificationPageSlot />}
               />
               <Route index element={<AccountSettingsPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
               <Route path="/notfound" element={<NotFoundPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>

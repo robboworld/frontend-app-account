@@ -379,12 +379,14 @@ $robbo-account-form-action-font-weight: 400;
   }
 
   #notifications.account-section {
-    .notification-preferences {
+    .notification-preferences__card {
       @include robbo-account-field-card;
     }
 
     .notification-heading {
       margin-bottom: $robbo-account-space-sm;
+      font-size: clamp(1.0625rem, 4vw, #{$robbo-account-section-title-size});
+      line-height: 1.3;
 
       @include media-breakpoint-down(lg) {
         text-align: center;
