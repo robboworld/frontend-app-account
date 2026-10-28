@@ -57,6 +57,7 @@ import {
 import { fetchSiteLanguages } from './site-language';
 import { fetchCourseList } from '../notification-preferences/data/thunks';
 import NotificationSettings from '../notification-preferences/NotificationSettings';
+import RobboCustomization from './robbo-customization';
 import { withLocation, withNavigate } from './hoc';
 
 class AccountSettingsPage extends React.Component {
@@ -73,6 +74,7 @@ class AccountSettingsPage extends React.Component {
       '#profile-information': React.createRef(),
       '#notifications': React.createRef(),
       '#site-preferences': React.createRef(),
+      '#customization': React.createRef(),
       '#linked-accounts': React.createRef(),
       '#delete-account': React.createRef(),
     };
@@ -799,6 +801,9 @@ class AccountSettingsPage extends React.Component {
             }}
           />
         </div>
+
+        {/* Robbo: «Настройка интерфейса» for the course team and staff (renders nothing for learners). */}
+        <RobboCustomization sectionRef={this.navLinkRefs['#customization']} />
 
         <div className="account-section pt-3 mb-5" id="linked-accounts" ref={this.navLinkRefs['#linked-accounts']}>
           <h2 className="section-heading h4 mb-3">{this.props.intl.formatMessage(messages['account.settings.section.linked.accounts'])}</h2>

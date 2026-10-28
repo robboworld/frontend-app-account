@@ -1,0 +1,123 @@
+// Copyright (C) 2026 Robbo <https://robbo.ru>
+// SPDX-License-Identifier: AGPL-3.0-only
+// Part of the Robbo Open edX MFE overrides. See NOTICE at repository root.
+//
+// «Настройка интерфейса» (robbo-customization/index.jsx): option cards with header screenshots.
+
+.page__account-settings .robbo-customization {
+  &__field {
+    @include robbo-account-field-card;
+
+    display: flex;
+    flex-direction: column;
+    gap: $robbo-account-space-lg;
+  }
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $robbo-account-space-xs $robbo-account-space-lg;
+  }
+
+  &__label {
+    margin: 0;
+    font-size: $robbo-account-field-title-size;
+    font-weight: 600;
+    line-height: 1.35;
+    color: $robbo-account-text-primary;
+  }
+
+  &__status {
+    font-size: $robbo-account-helper-size;
+    line-height: 1.35;
+
+    &--saved {
+      color: $robbo-account-accent-green;
+    }
+
+    &--error {
+      color: $danger;
+    }
+  }
+
+  &__options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: $robbo-account-space-lg;
+  }
+
+  &__option {
+    display: flex;
+    flex-direction: column;
+    gap: $robbo-account-space-sm;
+    min-width: 0;
+    margin: 0;
+    padding: $robbo-account-space-md;
+    background: $white;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: $robbo-account-field-radius;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      border-color: rgba($robbo-account-accent-green, 0.45);
+    }
+
+    &.is-selected {
+      border-color: $robbo-account-accent-green;
+      box-shadow: 0 0 0 1px $robbo-account-accent-green;
+    }
+
+    // Keyboard focus only: a mouse click leaves focus on the radio, the selection border is enough.
+    &:has(input:focus-visible) {
+      outline: 2px solid $robbo-account-accent-green;
+      outline-offset: 2px;
+    }
+  }
+
+  &__preview {
+    overflow: hidden;
+    background: $white;
+    border: 1px solid $robbo-account-field-border-color;
+    border-radius: calc(#{$robbo-account-field-radius} - 0.25rem);
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__choice {
+    display: flex;
+    align-items: center;
+    gap: $robbo-account-space-sm;
+    margin-top: $robbo-account-space-xs;
+
+    input {
+      flex: 0 0 auto;
+      width: 1.125rem;
+      height: 1.125rem;
+      margin: 0;
+      accent-color: $robbo-account-accent-green;
+      cursor: pointer;
+    }
+  }
+
+  &__title {
+    font-size: $robbo-account-field-value-size;
+    font-weight: 600;
+    line-height: 1.35;
+    color: $robbo-account-text-primary;
+  }
+
+  &__help {
+    // Under the title, aligned with its text (radio width + gap).
+    padding-left: calc(1.125rem + #{$robbo-account-space-sm});
+    font-size: $robbo-account-helper-size;
+    line-height: 1.45;
+    color: $robbo-account-text-secondary;
+  }
+}

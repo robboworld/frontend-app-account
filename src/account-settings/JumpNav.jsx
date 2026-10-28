@@ -6,6 +6,8 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import Scrollspy from 'react-scrollspy';
 import messages from './AccountSettingsPage.messages';
+import { useWhatsNewPlacement } from './robbo-customization';
+import robboCustomizationMessages from './robbo-customization/messages';
 
 const JumpNav = ({
   intl,
@@ -13,6 +15,8 @@ const JumpNav = ({
   const { width } = useWindowSize();
   const isSidebarNav = width >= breakpoints.large.minWidth;
   const [currentSectionId, setCurrentSectionId] = useState('basic-information');
+  const whatsNewPlacement = useWhatsNewPlacement();
+  const showCustomization = Boolean(whatsNewPlacement && whatsNewPlacement.canChoose);
 
   const sections = useMemo(() => {
     const items = [
@@ -32,6 +36,10 @@ const JumpNav = ({
         id: 'site-preferences',
         label: intl.formatMessage(messages['account.settings.section.site.preferences']),
       },
+      ...(showCustomization ? [{
+        id: 'customization',
+        label: intl.formatMessage(robboCustomizationMessages.heading),
+      }] : []),
       {
         id: 'linked-accounts',
         label: intl.formatMessage(messages['account.settings.section.linked.accounts']),
@@ -46,7 +54,7 @@ const JumpNav = ({
     }
 
     return items;
-  }, [intl]);
+  }, [intl, showCustomization]);
 
   const scrollSpyItems = useMemo(() => sections.map((section) => section.id), [sections]);
 
