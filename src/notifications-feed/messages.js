@@ -131,6 +131,7 @@ const messages = defineMessages({
       learner_deadline_soon {Deadline soon}
       learner_section_released {New section}
       learner_certificate_issued {Certificate}
+      learner_certificate_offer {Certificate}
       learner_grade_changed {Grade changed}
       learner_added_to_course {Enrollment}
       learner_enrolled {New learner}
@@ -261,6 +262,11 @@ const messages = defineMessages({
     id: 'robbo.notifications.text.learnerCertificateIssued',
     defaultMessage: 'Your certificate for <b>{courseName}</b> is ready',
     description: 'Learner: certificate issued',
+  },
+  learnerCertificateOffer: {
+    id: 'robbo.notifications.text.learnerCertificateOffer',
+    defaultMessage: 'You passed <b>{courseName}</b>: the certificate is available for {priceDisplay}',
+    description: 'Learner: passed a course whose certificate is sold; priceDisplay is like «990 ₽»',
   },
   learnerGradeChanged: {
     id: 'robbo.notifications.text.learnerGradeChanged',

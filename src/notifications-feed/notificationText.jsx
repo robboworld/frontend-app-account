@@ -34,6 +34,7 @@ const TYPE_MESSAGES = {
   learner_deadline_soon: () => messages.learnerDeadlineSoon,
   learner_section_released: () => messages.learnerSectionReleased,
   learner_certificate_issued: () => messages.learnerCertificateIssued,
+  learner_certificate_offer: () => messages.learnerCertificateOffer,
   learner_grade_changed: () => messages.learnerGradeChanged,
   learner_added_to_course: () => messages.learnerAddedToCourse,
   learner_enrolled: () => messages.learnerEnrolled,

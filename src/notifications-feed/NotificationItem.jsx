@@ -31,6 +31,7 @@ const TYPE_ICONS = {
   learner_deadline_soon: Event,
   learner_section_released: MenuBook,
   learner_certificate_issued: EmojiEvents,
+  learner_certificate_offer: EmojiEvents,
   learner_grade_changed: Grading,
   learner_added_to_course: School,
   learner_enrolled: PersonAdd,
