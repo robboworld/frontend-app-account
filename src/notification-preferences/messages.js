@@ -40,6 +40,7 @@ const messages = defineMessages({
       learnerDeadlineSoon {A deadline is near}
       learnerSectionReleased {A new section is open}
       learnerCertificateIssued {Certificate issued}
+      learnerCertificateOffer {Passed a course: the certificate can be bought}
       learnerGradeChanged {The course team changed my grade}
       learnerAddedToCourse {I was enrolled in a course}
       learnerEnrolled {A learner enrolled}

@@ -71,7 +71,8 @@ const saveChannel = async (courseId, app, type, channel, value) => {
 
 // Robbo types in a reading order (the LMS keeps none): learner, then team, then Studio.
 const TYPE_ORDER = [
-  'learner_deadline_soon', 'learner_section_released', 'learner_grade_changed', 'learner_certificate_issued',
+  'learner_deadline_soon', 'learner_section_released', 'learner_grade_changed', 'learner_certificate_offer',
+  'learner_certificate_issued',
   'learner_added_to_course', 'learner_enrolled', 'learner_test_completed', 'learner_low_score',
   'learner_all_tests_completed', 'learner_ora_submitted', 'learner_all_ora_submitted', 'learner_course_completed', 'learner_missed_deadline',
   'submission_review_overdue', 'learner_inactive', 'learner_unenrolled', 'course_weekly_report',
